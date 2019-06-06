@@ -1,15 +1,22 @@
 # fluxa_beta
 Versão Beta da Plataforma Fluxa - V1.2018
 
-Autores
+Co-Autores
 Lala Dehenzelin
+Samara Daiel
 Rodrigo Benedito
 Diogo Lopes
+
 
 Requisitos
 PHP
 MYSQL
 SLIM FRAMEWORK
+
+Editando os arquivos de configuração para conexão com o banco de dados:
+/src/model/persistence/ConexaoPDO.php
+
+self::$instance = new PDO('mysql:localhost;dbname=nome_bd', 'nome_user_bd', 'sena_user_bd',
 
 Criando uma BASE DE DADOS
 Para criar a base de dados copie e cole o DUMP da estrutura de dados no seu gerenciador e execute.
