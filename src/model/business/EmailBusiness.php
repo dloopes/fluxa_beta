@@ -91,7 +91,7 @@ class EmailBusiness {
 		$mail->Mailer = 'smtp.hostinger.com.br';
 		$mail->SMTPAuth = true; // ativo a autenticação SMTP, no caso do GMail, é necessário
 		$mail->Username = "sistema@fluxa.xyz"; // Usuário SMTP do GMail
-		$mail->Password = "FDEf8vKJBLcY"; // Senha do usuário SMTP do GMail
+		$mail->Password = "coloquesuasenha"; // Senha do usuário SMTP do GMail
 
 
 		$mail->From = "sistema@fluxa.xyz"; // Email de quem envia o email
