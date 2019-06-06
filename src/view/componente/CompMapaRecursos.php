@@ -230,7 +230,7 @@ class CompMapaRecursos implements IComponente {
 
 		</script>
 
-		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQZKTit2ice6KDwHxAc5iQVZQhoBwimjw&callback=initMap">
+		<script async defer src="www.google.com.br/geresuaAPIabaixo">
 		</script>
 		<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>      
 		<?php
