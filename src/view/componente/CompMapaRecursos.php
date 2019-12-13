@@ -122,11 +122,11 @@ class CompMapaRecursos implements IComponente {
 						            '<p>Tipo de Fluxo: <b><?php echo(EnumTiposFluxo::getValueView($recurso->getTipoFluxo()))?></b></p>'+   
 						            '<div class="text-center" style="margin-top: 20px;">'+ 
 						            <?php 
-						            if($usuario->getId() != $_SESSION['id']){
+						            if($usuario->getId() != $_SESSION['id'] && is_numeric($recurso->getId())){
 						            	?>						            	
-						            	'<form method="POST" action="/sistema/fluxo" id=<?php echo("form_"+$recurso->getId())?>>'+ 
-						            		'<input type="hidden" name="id_recurso" value=<?php echo($recurso->getId())?> />'+ 
-						            	 	'<input type="button" style="min-width: 100px;" class="btn btn-success btn-sm" title="Fluxar" onclick="sendFormFluxo(<?php echo("form_"+$recurso->getId())?>);" value="Fluxar"/>'+ 
+						            	'<form method="POST" action="/sistema/fluxo" id="<?php echo("form_".$recurso->getId())?>">'+ 
+						            		'<input type="hidden" name="id_recurso" value="<?php echo($recurso->getId())?>" />'+ 
+						            	 	'<input type="button" style="min-width: 100px;" class="btn btn-success btn-sm" title="Fluxar" onclick="sendFormFluxo(\'<?php echo("form_". $recurso->getId())?>\');" value="Fluxar"/>'+ 
 						            	'</form>'+ 							            
 						            	<?php
 						            }
@@ -180,9 +180,9 @@ class CompMapaRecursos implements IComponente {
 						            <?php 
 						            if($usuario->getId() != $_SESSION['id']){
 						            	?>						            	
-						            	'<form method="POST" action="/sistema/fluxo" id=<?php echo("form_"+$recurso->getId())?>>'+ 
+						            	'<form method="POST" action="/sistema/fluxo" id=<?php echo("form_".$recurso->getId())?>>'+ 
 						            		'<input type="hidden" name="id_recurso" value=<?php echo($recurso->getId())?> />'+ 
-						            	 	'<input type="button" style="min-width: 100px;" class="btn btn-success btn-sm" title="Fluxar" onclick="sendFormFluxo(<?php echo("form_"+$recurso->getId())?>);" value="Fluxar"/>'+ 
+						            	 	'<input type="button" style="min-width: 100px;" class="btn btn-success btn-sm" title="Fluxar" onclick="sendFormFluxo(<?php echo("form_".$recurso->getId())?>);" value="Fluxar"/>'+ 
 						            	'</form>'+ 							            
 						            	<?php
 						            }

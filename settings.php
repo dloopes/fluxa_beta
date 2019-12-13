@@ -1,9 +1,13 @@
 <?php
 
 //define("URI_SISTEMA", "https://" . $_SERVER['SERVER_NAME'] . "/sistema/");
-define("URI_SISTEMA", "http://" . $_SERVER['SERVER_NAME'] . ":8080/diogo_loopes/fluxa_beta/");
+/* define("URI_SISTEMA", "http://" . $_SERVER['SERVER_NAME'] . ":8080/diogo_loopes/fluxa_beta/");
 define("BASE_SISTEMA", "/diogo_loopes/fluxa_beta/");
 define("URL_API", "/diogo_loopes/fluxa_beta/api/");
+*/
+define("URI_SISTEMA", "http://" . $_SERVER['SERVER_NAME'] . ":8087/");
+define("BASE_SISTEMA", "/");
+define("URL_API", "/api/");
 
 define("KEY_PASS", "flux@.b3ta"); //key pass pra ajudar na autenticação da api.
 

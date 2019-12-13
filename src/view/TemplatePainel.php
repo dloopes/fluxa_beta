@@ -33,7 +33,7 @@ use Fluxa\Business\UsuarioBusiness;
      <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>lib/jquery-ui/themes/base/autocomplete.css">
 
 
-     <link href="<?php echo URI_SISTEMA ?>dist/js/dataTables/jquery.dataTables.min.css" rel="stylesheet">
+     <link href="<?php echo URI_SISTEMA ?>dist/js/datatables/jquery.dataTables.min.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

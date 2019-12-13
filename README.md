@@ -10,10 +10,14 @@ Co-Autores
 > Diogo Lopes
 
 
+
 ## Pré-Requisitos
 PHP
 MYSQL
 SLIM FRAMEWORK
+NPM
+
+Instale os módulos existentes na pasta /src/vue através do comando npm install
 
 Editando os arquivos de configuração para conexão com o banco de dados:
 
@@ -21,7 +25,7 @@ Editando os arquivos de configuração para conexão com o banco de dados:
 
 ```PHP
 
-self::$instance = new PDO('mysql:localhost;dbname=nome_bd', 'nome_user_bd', 'sena_user_bd',
+self::$instance = new PDO('mysql:host=localhost;port=3306;dbname=dbname', 'nome_user_bd', 'sena_user_bd',
 
 ```
 Criando uma BASE DE DADOS

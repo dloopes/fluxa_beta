@@ -83,7 +83,7 @@ class UsuarioBusiness {
 		}
 
 		if (!$usuario->isEmailConfirmado()) {
-			//throw new BusinessException("Cadastro não foi confirmado, verifique seu email.");
+			throw new BusinessException("Cadastro não foi confirmado, verifique seu email.");
 		}
 
 		if (md5($senha) != $usuario->getSenha()) {
