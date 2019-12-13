@@ -1,0 +1,42 @@
+[26-Feb-2013 15:53:29] PHP Warning:  imagesx(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 55
+[26-Feb-2013 15:53:29] PHP Warning:  imagesy(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 56
+[26-Feb-2013 15:53:29] PHP Warning:  Division by zero in /home/controla/public_html/sistema/include/thumb.php on line 57
+[26-Feb-2013 15:53:29] PHP Warning:  Division by zero in /home/controla/public_html/sistema/include/thumb.php on line 57
+[26-Feb-2013 15:53:29] PHP Warning:  imagecreatetruecolor() [<a href='function.imagecreatetruecolor'>function.imagecreatetruecolor</a>]: Invalid image dimensions in /home/controla/public_html/sistema/include/thumb.php on line 63
+[26-Feb-2013 15:53:29] PHP Warning:  imagecopyresized(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 65
+[26-Feb-2013 15:53:29] PHP Warning:  imagedestroy(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 66
+[26-Feb-2013 15:53:29] PHP Warning:  imagepng(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 84
+[26-Feb-2013 15:53:39] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[26-Feb-2013 15:53:39] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[26-Feb-2013 15:56:46] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[26-Feb-2013 15:56:46] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[26-Feb-2013 15:57:11] PHP Warning:  imagesx(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 55
+[26-Feb-2013 15:57:11] PHP Warning:  imagesy(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 56
+[26-Feb-2013 15:57:11] PHP Warning:  Division by zero in /home/controla/public_html/sistema/include/thumb.php on line 57
+[26-Feb-2013 15:57:11] PHP Warning:  Division by zero in /home/controla/public_html/sistema/include/thumb.php on line 57
+[26-Feb-2013 15:57:11] PHP Warning:  imagecreatetruecolor() [<a href='function.imagecreatetruecolor'>function.imagecreatetruecolor</a>]: Invalid image dimensions in /home/controla/public_html/sistema/include/thumb.php on line 63
+[26-Feb-2013 15:57:11] PHP Warning:  imagecopyresized(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 65
+[26-Feb-2013 15:57:11] PHP Warning:  imagedestroy(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 66
+[26-Feb-2013 15:57:11] PHP Warning:  imagepng(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 84
+[26-Feb-2013 15:59:33] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[26-Feb-2013 15:59:33] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[26-Feb-2013 20:09:46] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[26-Feb-2013 20:09:46] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[26-Feb-2013 20:14:31] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[26-Feb-2013 20:14:31] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[13-Mar-2013 09:18:20] PHP Warning:  imagesx(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 55
+[13-Mar-2013 09:18:20] PHP Warning:  imagesy(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 56
+[13-Mar-2013 09:18:20] PHP Warning:  Division by zero in /home/controla/public_html/sistema/include/thumb.php on line 57
+[13-Mar-2013 09:18:20] PHP Warning:  Division by zero in /home/controla/public_html/sistema/include/thumb.php on line 57
+[13-Mar-2013 09:18:20] PHP Warning:  imagecreatetruecolor() [<a href='function.imagecreatetruecolor'>function.imagecreatetruecolor</a>]: Invalid image dimensions in /home/controla/public_html/sistema/include/thumb.php on line 63
+[13-Mar-2013 09:18:20] PHP Warning:  imagecopyresized(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 65
+[13-Mar-2013 09:18:20] PHP Warning:  imagedestroy(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 66
+[13-Mar-2013 09:18:20] PHP Warning:  imagepng(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 84
+[13-Mar-2013 09:18:21] PHP Warning:  imagesx(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 55
+[13-Mar-2013 09:18:21] PHP Warning:  imagesy(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 56
+[13-Mar-2013 09:18:21] PHP Warning:  Division by zero in /home/controla/public_html/sistema/include/thumb.php on line 57
+[13-Mar-2013 09:18:21] PHP Warning:  Division by zero in /home/controla/public_html/sistema/include/thumb.php on line 57
+[13-Mar-2013 09:18:21] PHP Warning:  imagecreatetruecolor() [<a href='function.imagecreatetruecolor'>function.imagecreatetruecolor</a>]: Invalid image dimensions in /home/controla/public_html/sistema/include/thumb.php on line 63
+[13-Mar-2013 09:18:21] PHP Warning:  imagecopyresized(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 65
+[13-Mar-2013 09:18:21] PHP Warning:  imagedestroy(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 66
+[13-Mar-2013 09:18:21] PHP Warning:  imagepng(): supplied argument is not a valid Image resource in /home/controla/public_html/sistema/include/thumb.php on line 84

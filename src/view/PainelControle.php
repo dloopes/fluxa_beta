@@ -25,7 +25,7 @@ use Fluxa\Entity\Recurso;
     </div>
     
     <div class="box-body">      
-      <form action="/sistema/painel/filtro" method="post">
+      <form action="<?php echo BASE_SISTEMA ?>painel/filtro" method="post">
         
         <div class="col-md-4">
           <div class="form-group has-success">
@@ -82,7 +82,7 @@ use Fluxa\Entity\Recurso;
   $(document).ready(function() {
 
     $('#inputNome').bootcomplete({
-      url:'/sistema/recursos/nome/json',
+      url:'<?php echo BASE_SISTEMA ?>recursos/nome/json',
       minLength : 3
     });
 

@@ -1,6 +1,9 @@
 <?php
 
-define("URI_SISTEMA", "http://" . $_SERVER['SERVER_NAME'] . ":8080/sistema/");
+define("URI_SISTEMA", "http://" . $_SERVER['SERVER_NAME'] . ":8084/diego_loopes/fluxa_beta/");
+
+
+
 
 
 /* --------------------- CONSTANTES PARA CONFIGURAÇÃO DE TELA -------------------------------- */

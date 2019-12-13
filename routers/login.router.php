@@ -13,6 +13,7 @@ $app->post('/login', function (Request $request, Response $response, array $args
 	return $controller->login($request, $response, $args);
 });
 
+
 $app->get('/', function (Request $request, Response $response, array $args) {
 	return $response->withStatus(302)->withHeader('Location', URI_SISTEMA . "login");
 });

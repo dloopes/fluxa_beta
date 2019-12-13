@@ -83,7 +83,7 @@ class RecursoBusiness {
 	public function buscarPorNome($nome, $tipoRecurso = null) {
 
 		if (empty($nome)) {
-			throw new BusinessException("Parâmetro inválido");
+			 throw new BusinessException("Parâmetro inválido");
 		}
 
 		return $this->daoRecurso->buscarPorNome($nome, $tipoRecurso, true);

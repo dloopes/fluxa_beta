@@ -1,5 +1,6 @@
 <?php
 use Fluxa\Business\NotificacaoBusiness;
+use Fluxa\Business\UsuarioBusiness;
 ?>
 
 <!DOCTYPE html>
@@ -11,23 +12,28 @@ use Fluxa\Business\NotificacaoBusiness;
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
-    <link rel="stylesheet" href="/sistema/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>lib/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="/sistema/lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>lib/font-awesome/css/font-awesome.min.css">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="/sistema/lib/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>lib/Ionicons/css/ionicons.min.css">
     <!-- jvectormap -->
-    <link rel="stylesheet" href="/sistema/lib/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>lib/jvectormap/jquery-jvectormap.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="/sistema/dist/template/css/AdminLTE.css">
+    <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>dist/template/css/AdminLTE.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="/sistema/dist/template/css/skins/_all-skins.css">
+    <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>dist/template/css/skins/_all-skins.css">
 
-    <link rel="stylesheet" href="/sistema/dist/css/bootcomplete.css">
+    <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>dist/css/bootcomplete.css">
+    <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>dist/css/vue_select.css?g=102">
 
-     <link rel="stylesheet" href="/sistema/dist/css/painel.css">
 
+     <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>dist/css/painel.css">
+     <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>lib/jquery-ui/themes/base/autocomplete.css">
+
+
+     <link href="<?php echo URI_SISTEMA ?>dist/js/dataTables/jquery.dataTables.min.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -39,31 +45,63 @@ use Fluxa\Business\NotificacaoBusiness;
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
     <!-- jQuery 3 -->
-<script src="/sistema/lib/jquery/dist/jquery.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+
+
+<script src="<?php echo URI_SISTEMA ?>dist/js/jquery-migrate-3.0.0.js?g=000009"></script>
+
+
+<script type="text/javascript" src="<?=BASE_SISTEMA?>vue/dist/main.js?k=<?=K_ASSET?>"></script>
+
+<script type="text/javascript" src="<?=BASE_SISTEMA?>dist/js/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="<?=BASE_SISTEMA?>dist/js/datatables/obj_datatable.js"></script>
+
+
+<!-- <script src="<?php echo URI_SISTEMA ?>lib/jquery/dist/jquery.min.js"></script> -->
 <!-- Bootstrap 3.3.7 -->
-<script src="/sistema/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="<?php echo URI_SISTEMA ?>lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- FastClick -->
-<script src="/sistema/lib/fastclick/lib/fastclick.js"></script>
+<script src="<?php echo URI_SISTEMA ?>lib/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="/sistema/dist/template/js/adminlte.min.js"></script>
+<script src="<?php echo URI_SISTEMA ?>dist/template/js/adminlte.min.js"></script>
 <!-- Sparkline -->
-<script src="/sistema/lib/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+<script src="<?php echo URI_SISTEMA ?>lib/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
 <!-- jvectormap  -->
-<script src="/sistema/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="/sistema/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+ <!-- <script src="<?php echo URI_SISTEMA ?>plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jvectormap/1.2.2/jquery-jvectormap.min.js"></script> 
+<script src="<?php echo URI_SISTEMA ?>plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script> 
 <!-- SlimScroll -->
-<script src="/sistema/lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script src="<?php echo URI_SISTEMA ?>lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- ChartJS -->
-<script src="/sistema/lib/chart.js/Chart.js"></script>
+<script src="<?php echo URI_SISTEMA ?>lib/chart.js/Chart.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <!--<script src="dist/template/js/pages/dashboard2.js"></script> -->
 <!-- AdminLTE for demo purposes -->
-<script src="/sistema/dist/template/js/demo.js"></script>
+<script src="<?php echo URI_SISTEMA ?>dist/template/js/demo.js"></script>
 
-<script src="/sistema/dist/js/bootcomplete.js"></script>
+<script src="<?php echo URI_SISTEMA ?>dist/js/bootcomplete.js"></script>
 
-<script src="/sistema/dist/js/bootbox.min.js"></script>
+<script src="<?php echo URI_SISTEMA ?>dist/js/bootbox.min.js"></script>
+<script src="<?php echo URI_SISTEMA ?>dist/js/sweetalert/sweetalert2.all.min.js"></script>
+<script type="text/javascript">
+window.K_AUTHORIZATION = "<?php echo UsuarioBusiness::getAuthorizationApi() ?>";    
+window.URL_API = "<?= URL_API ?>";    
+</script>
+<style>
+#div_drag{
+    width:99%;
+    height:100px;
+    line-height:100px;
+    border:5px dashed #CCC;
 
+    font-family:Verdana;
+    text-align:center;
+}
+
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 
@@ -72,7 +110,7 @@ use Fluxa\Business\NotificacaoBusiness;
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="/sistema/painel" class="logo">
+    <a href="<?php echo URI_SISTEMA ?>painel" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">FLX</span>
       <!-- logo for regular state and mobile devices -->
@@ -155,7 +193,7 @@ use Fluxa\Business\NotificacaoBusiness;
                   <a href="#" class="btn btn-default btn-flat">Meu Perfil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="/sistema/logout" class="btn btn-default btn-flat">Logout</a>
+                  <a href="<?php echo URI_SISTEMA ?>logout" class="btn btn-default btn-flat">Logout</a>
                 </div>
               </li>
             </ul>
@@ -174,7 +212,7 @@ use Fluxa\Business\NotificacaoBusiness;
       <ul class="sidebar-menu" data-widget="tree">
 
         <li>
-          <a href="/sistema/painel">
+          <a href="<?php echo URI_SISTEMA ?>painel">
             <i class="fa fa-th"></i> <span>Painel</span>
           </a>
         </li>
@@ -188,9 +226,24 @@ use Fluxa\Business\NotificacaoBusiness;
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="/sistema/potencialidades"><i class="fa fa-circle-o text-aqua"></i> Ofereço</a></li>
-            <li><a href="/sistema/possibilidades"><i class="fa fa-circle-o text-green"></i> Necessito</a></li>
-            <li><a href="/sistema/fluxos"><i class="fa fa-circle-o"></i> Meus Fluxos</a></li>
+            <li><a href="<?php echo URI_SISTEMA ?>potencialidades"><i class="fa fa-circle-o text-aqua"></i> Ofereço</a></li>
+            <li><a href="<?php echo URI_SISTEMA ?>possibilidades"><i class="fa fa-circle-o text-green"></i> Necessito</a></li>
+            <li><a href="<?php echo URI_SISTEMA ?>fluxos"><i class="fa fa-circle-o"></i> Meus Fluxos</a></li>
+          </ul>
+        </li>
+        
+        
+           <li class="treeview active">
+          <a href="#">
+            <i class="fa fa-dashboard"></i>
+            <span>Narrativas</span>
+            <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li style="display:none"><a href="<?php echo URI_SISTEMA ?>iniciativas"><i class="fa fa-circle-o text-aqua"></i> Buscar Iniciativas</a></li>
+            <li><a href="<?php echo URI_SISTEMA ?>iniciativas_my"><i class="fa fa-circle-o text-green"></i> Minhas Iniciativas</a></li>
           </ul>
         </li>
 
@@ -199,21 +252,21 @@ use Fluxa\Business\NotificacaoBusiness;
         
           <p class="text-left" style="color: #b8c7ce; padding: 20px 15px 0px 0px;">
             <i class="fa fa-circle-o text-red"></i>
-            <a href="/sistema/usuarios/1" style="padding: 0px; border-left: none;">
+            <a href="<?php echo URI_SISTEMA ?>usuarios/1" style="padding: 0px; border-left: none;">
               <span style="margin-left: 10px;"><?php echo($_SESSION['qtde_total_usuarios']) ?> Usuários </span>
             </a>
           </p>
        
           <p class="text-left" style="color: #b8c7ce; padding: 10px 15px 0px 0px;">
             
-            <a href="/sistema/potencialidades/all/1" style="padding: 0px; border-left: none;">
+            <a href="<?php echo URI_SISTEMA ?>potencialidades/all/1" style="padding: 0px; border-left: none;">
               <i class="fa fa-circle-o text-aqua"></i>
               <span style="margin-left: 10px;"><?php echo($_SESSION['qtde_total_potencialidades'])?> Ofertas </span>
             </a>
           </p>
 
           <p class="text-left" style="color: #b8c7ce; padding: 10px 15px 0px 0px;">
-            <a href="/sistema/possibilidades/all/1" style="padding: 0px; border-left: none;">
+            <a href="<?php echo URI_SISTEMA ?>possibilidades/all/1" style="padding: 0px; border-left: none;">
               <i class="fa fa-circle-o text-green"></i>
               <span style="margin-left: 10px;"><?php echo($_SESSION['qtde_total_possibilidades']) ?> Necessidades </span>
             </a>
@@ -238,7 +291,7 @@ use Fluxa\Business\NotificacaoBusiness;
         <!-- Profile Image -->
           <div class="box box-default" style="margin-top: 20px;">
             <div class="box-body box-profile">
-              <img class="profile-user-img img-responsive img-circle" src="/sistema/dist/template/img/foto_diogo.jpg" alt="User profile picture">
+              <img class="profile-user-img img-responsive img-circle" src="<?php echo URI_SISTEMA ?>dist/template/img/foto_diogo.jpg" alt="User profile picture">
 
               <h3 class="profile-username text-center">Diogo Loopes</h3>
 
@@ -328,6 +381,7 @@ use Fluxa\Business\NotificacaoBusiness;
 
 </div>
 
+<div id="div_error_api"></div>
 </body>
 
 <script type="text/javascript">
@@ -381,4 +435,13 @@ use Fluxa\Business\NotificacaoBusiness;
         }); 
       }
 
+     /* 
+$.ajaxSetup({
+       beforeSend: function (xhr)
+       {
+          console.log("setando authorization");
+          xhr.setRequestHeader("Authorization",window.K_AUTHORIZATION); 
+       }
+ }); 
+ */
 </script>

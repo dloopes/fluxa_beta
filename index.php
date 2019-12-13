@@ -17,7 +17,7 @@ $app = new Slim\App(['settings' => ['displayErrorDetails' => true]]);
 //$app->config('debug', true);
 
 $app->add(function (Request $request, Response $response, $next) {
-	$controller = new SecurityController();
+	$controller = new SecurityController(); //Testando o login e senha aqui..
 	return $controller->verificaUsuarioLogado($request, $response, $next);
 });
 
@@ -28,6 +28,11 @@ $container = $app->getContainer();
 $container['view'] = function ($container) {
 	return new \Slim\Views\PhpRenderer('src/view/');
 };
+
+$librares = glob(__DIR__ . '/src/library/persist/*.php');
+foreach ($librares as $router) {
+	require $router;
+}
 
 //Carregando as rotas
 $routers = glob(__DIR__ . '/routers/*.router.php');

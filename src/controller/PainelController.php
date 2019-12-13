@@ -33,6 +33,7 @@ class PainelController {
 		//$listaPotencialidades = $this->recursoBusiness->buscarPotencialidades(false, 50);
 		//$listaPossibilidades = $this->recursoBusiness->buscarPossibilidades(false, 50);
 
+
 		return $this->view->render($response, "TemplatePainel.php", [
 			"pagina" => "PainelControle.php",
 			"listaPotencialidades" => $listaPotencialidades,
@@ -57,6 +58,8 @@ class PainelController {
 		if(isset($dadosRequest['tipo_recurso']) && !empty($dadosRequest['tipo_recurso'])){
 			$tipoRecurso = $dadosRequest['tipo_recurso'];
 		}			
+        $listaPossibilidades = array(); $listaPotencialidades = array();
+
 
 		if($tipoRecurso == Recurso::TIPO_POTENCIALIDADE){
 			$listaPotencialidades = $this->recursoBusiness->buscarPorNome($nomeRecurso, Recurso::TIPO_POTENCIALIDADE);
@@ -68,6 +71,7 @@ class PainelController {
 			$listaPotencialidades = $this->recursoBusiness->buscarPorNome($nomeRecurso, Recurso::TIPO_POTENCIALIDADE);
 			$listaPossibilidades = $this->recursoBusiness->buscarPorNome($nomeRecurso, Recurso::TIPO_POSSIBILIDADE);
 		}
+		//print_r( $listaPossibilidades ); print_r($listaPotencialidades ); die(" ");
 
 		return $this->view->render($response, "TemplatePainel.php", [
 			"pagina" => "PainelControle.php",

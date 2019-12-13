@@ -50,22 +50,50 @@ class EnderecoBusiness {
 
 		$url = "https://maps.googleapis.com/maps/api/geocode/json?address=".$adressValue."&key=AIzaSyBQZKTit2ice6KDwHxAc5iQVZQhoBwimjw";
 
-		$ch = curl_init(); 
+        if ( function_exists("curl_init")){
 
-		curl_setopt($ch, CURLOPT_URL, $url); 
+        		$ch = curl_init(); 
 
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_URL, $url); 
 
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-		$google_output = curl_exec($ch); 
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
 
-		$jsonDecodificado = json_decode($google_output, true);
+				$google_output = curl_exec($ch); 
 
-		$endereco->setLatitude($jsonDecodificado["results"][0]["geometry"]["location"]["lat"]);
-		$endereco->setLongitude($jsonDecodificado["results"][0]["geometry"]["location"]["lng"]);
+				$jsonDecodificado = json_decode($google_output, true);
 
-		curl_close($ch);
+				$endereco->setLatitude($jsonDecodificado["results"][0]["geometry"]["location"]["lat"]);
+				$endereco->setLongitude($jsonDecodificado["results"][0]["geometry"]["location"]["lng"]);
+
+				curl_close($ch);
+
+        } else {
+
+
+			$result = file_get_contents($url);
+			$jsonDecodificado = json_decode($result, true);
+			
+
+            $endereco->setLatitude($jsonDecodificado["results"][0]["geometry"]["location"]["lat"]);
+			$endereco->setLongitude($jsonDecodificado["results"][0]["geometry"]["location"]["lng"]);
+
+			/* print_r( $result ); die(" ");
+
+			$output = array (
+				'temperature' => bm_getWeatherProperties('temp', $result),
+				'weather' => bm_getWeatherProperties('text', $result),
+				'weather_code' => bm_getWeatherProperties('code', $result),
+				'class' => 'weatherIcon-' . bm_getWeatherProperties('code', $result),
+			);
+
+			return $output; */
+
+
+
+        }
+	
 
 		return $endereco;
 	}

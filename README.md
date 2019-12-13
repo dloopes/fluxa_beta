@@ -379,6 +379,71 @@ ALTER TABLE `recurso`
   ADD CONSTRAINT `recurso_ibfk_3` FOREIGN KEY (`id_endereco`) REFERENCES `endereco` (`id`);
 COMMIT;
 
+
+CREATE TABLE `arquivo` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `arquivo` VARCHAR(300) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+  `type` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+  `id_tabela` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+  `titulo` VARCHAR(300) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+  `tamanho` DECIMAL(18,2) NULL DEFAULT NULL COMMENT 'Tamanho em bytes do arquivo.',
+  `id_registro` INT(11) NULL DEFAULT NULL COMMENT 'Id do registro.',
+  `old_nome` VARCHAR(300) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+  `thumbs` TEXT NULL COLLATE 'utf8_unicode_ci',
+  `pid` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `ix_registro` (`id_registro`, `id_tabela`)
+)
+COLLATE='utf8_unicode_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=1
+;
+
+
+CREATE TABLE `recurso_dados` (
+  `id` INT(50) NOT NULL,
+   objetivo longtext null ,
+   objetivo_ods longtext null ,
+   dimensao varchar(200) ,
+   recursos varchar(200),
+   
+  PRIMARY KEY (`id`)  
+)
+COLLATE='utf8_unicode_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=1
+;
+
+
+alter table recurso_dados add categoria text;
+
+alter table recurso add created_at datetime null;
+alter table recurso add updated_at datetime null;
+
+
+CREATE TABLE `recurso_associacao` (
+  `id` INT(50) NOT NULL AUTO_INCREMENT,
+   id_recurso_pai int,
+   id_usuario_recurso_pai int,
+   id_recurso_filho int,
+   id_usuario_recurso_filho int,
+   tipo varchar(50),
+   status varchar(50),
+   
+  `date_insert` datetime,
+  
+  PRIMARY KEY (`id`),
+  INDEX `id_recurso_pai` (`id_recurso_pai`),
+  INDEX `id_recurso_filho` (`id_recurso_filho`),
+  INDEX `id_usuario_recurso_filho` (`id_usuario_recurso_filho`)
+)
+COLLATE='utf8_unicode_ci'
+ENGINE=InnoDB
+;
+
+
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

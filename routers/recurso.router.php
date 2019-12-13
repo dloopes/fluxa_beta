@@ -53,6 +53,14 @@ $app->get('/possibilidades/inativar/{id}', function (Request $request, Response 
 	return $controller->getPossibilidadeInativar($request, $response, $args);
 });
 
+
+$app->get('/iniciativas_my', function (Request $request, Response $response, array $args) {
+	$controller = new RecursoController($this->view);	
+	return $controller->getViewMinhasIniciativas($request, $response, $args);
+});
+
+
+
 $app->get('/recursos/nome/json', function (Request $request, Response $response, array $args) {		
 	$controller = new RecursoController($this->view);
 	return $controller->getDiferentesNomesDeRecursos($request, $response, $args);

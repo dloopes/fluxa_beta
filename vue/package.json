@@ -1,0 +1,32 @@
+{
+  "name": "vuetest",
+  "version": "1.0.0",
+  "description": "vue com webpack",
+  "main": "index.js",
+  "dependencies": {
+    "css-loader": "^2.1.0",
+    "vue": "^2.5.7",
+    "vue-loader": "^15.5.1",
+    "vue-router": "^3.0.1",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.5.22",
+    "cross-env": "^5.1",
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "teste",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.config.dev.js",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=build/webpack.config.dev.js",
+    "watch": "webpack --watch --progress --hide-modules --config=build/webpack.config.dev.js",
+    "build": "webpack --config build/webpack.config.dev.js",
+    "watch0": "npm run development -- --watch"
+  },
+  "keywords": [
+    "teste"
+  ],
+  "author": "rafael rend",
+  "license": "ISC"
+}

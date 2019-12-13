@@ -16,6 +16,33 @@ class UsuarioBusiness {
 		$this->daoUsuario = new UsuarioDAO();
 		$this->recursoBusiness = new RecursoBusiness();
 	}
+        
+            //Quando a api estiver usando o sistema, vamos salvar o usuário aqui para futuras interações.
+        public function setUserApi($id){
+            $GLOBALS["id_usuario_api"] = $id;
+        }
+        
+        public function getUserApi(){
+            return $GLOBALS["id_usuario_api"];
+        }
+
+        public static function getToken($id){ //Token para ser usado na api do usuário.
+            return md5(KEY_PASS."|".$id);
+        }
+        
+        public static function getAuthorizationKey($id){
+            return $id."-".self::getToken($id);
+        }
+        
+        public static function getAuthorizationApi(){
+              // print_r( $_SESSION ); die(" ");
+		/* if ( ! is_null( $_SESSION['usuario_logado']) ){                    
+                    $usuario = $_SESSION['usuario_logado'];                    
+                    return self::getAuthorizationKey($usuario->id);
+                }
+                */
+                return self::getAuthorizationKey( $_SESSION["id"] );
+        }
 
 	public function salvar(Usuario $usuario) {
 
@@ -56,7 +83,7 @@ class UsuarioBusiness {
 		}
 
 		if (!$usuario->isEmailConfirmado()) {
-			throw new BusinessException("Cadastro não foi confirmado, verifique seu email.");
+			//throw new BusinessException("Cadastro não foi confirmado, verifique seu email.");
 		}
 
 		if (md5($senha) != $usuario->getSenha()) {
@@ -79,7 +106,8 @@ class UsuarioBusiness {
 		return true;
 
 	}
-
+        
+    
 	public function verificaUsuarioLogado() {
 
 		if (isset($_SESSION['usuario_logado']) && !empty($_SESSION['usuario_logado'])) {

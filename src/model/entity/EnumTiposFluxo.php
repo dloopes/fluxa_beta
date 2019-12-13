@@ -16,10 +16,11 @@ class EnumTiposFluxo extends Enum{
     const ENCONTRO = "Encontro";
     const PROJETO = "Projeto";
     const MODELO = "Modelo";
+    const NARRATIVA = "Narrativa";
 
     public static function getValueView($key){
 
-        switch ($key) {
+        switch (strtoupper($key) ) {
             case 'USO_COMPARTILHADO':
                 return EnumTiposFluxo::USO_COMPARTILHADO; 
             case 'DOACAO':
@@ -42,6 +43,8 @@ class EnumTiposFluxo extends Enum{
                 return EnumTiposFluxo::PROJETO; 
             case 'MODELO':
                 return EnumTiposFluxo::MODELO; 
+            case 'NARRATIVA':
+                return EnumTiposFluxo::NARRATIVA; 
             default:
                 return "";
         }

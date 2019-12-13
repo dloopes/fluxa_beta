@@ -111,8 +111,9 @@ class UsuarioController {
 	public function getUsuarios($request, $response, $args) {
 
 		$numPag = $request->getAttribute('pag');
+              
 
-		$response = $response->withHeader('Content-type', 'html; charset=utf-8');
+		//$response = $response->withHeader('Content-type', 'html; charset=utf-8');
 
 		$usuarioBusiness = new UsuarioBusiness();
 
@@ -123,6 +124,7 @@ class UsuarioController {
 		} else {
 			$usuarios = $usuarioBusiness->buscaUsuarioPorNome($chavePesq);
 		}
+                //  die("testes? ");
 
 		return $this->view->render($response, "TemplatePainel.php", [
 			"pagina" =>"ListaUsuario.php",
@@ -136,6 +138,7 @@ class UsuarioController {
 
 		$idUsuario = $request->getAttribute('id_usuario');
 		$tab = $request->getAttribute('tab');
+               
 
 		if (empty($idUsuario)) {
 			throw new ControlerException("Id inválido");

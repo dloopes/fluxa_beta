@@ -14,8 +14,8 @@ use Fluxa\View\Componente\CompSelectCategoriaRecurso;
   	</h1>
 
 	<ol class="breadcrumb">
-		<li><a href="/sistema/painel"><i class="fa fa-th"></i> Painel</a></li>
-		<li><a href="/sistema/potencialidades">Potencialidades</a></li>
+		<li><a href="<?php echo BASE_SISTEMA ?>painel"><i class="fa fa-th"></i> Painel</a></li>
+		<li><a href="<?php echo BASE_SISTEMA ?>potencialidades">Potencialidades</a></li>
 	</ol>
 </section>
 
@@ -23,7 +23,7 @@ use Fluxa\View\Componente\CompSelectCategoriaRecurso;
 
 	<div class="box box-primary" style="padding: 10px;">
 
-		<form role="form" method="POST" action="/sistema/possibilidades/cadastro">
+		<form role="form" method="POST" action="<?php echo BASE_SISTEMA ?>possibilidades/cadastro">
 
 			<div class="box-body">	
 
@@ -79,7 +79,7 @@ use Fluxa\View\Componente\CompSelectCategoriaRecurso;
 					<div class="col-md-8">
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary btn-formulario">Salvar</button>	
-							<button onclick="location.href='/sistema/possibilidades'" type="button" class="btn btn-warning btn-formulario">Voltar</button>
+							<button onclick="location.href='<?php echo BASE_SISTEMA ?>possibilidades'" type="button" class="btn btn-warning btn-formulario">Voltar</button>
 						</div>
 					</div>			
 				</div>
@@ -97,7 +97,7 @@ use Fluxa\View\Componente\CompSelectCategoriaRecurso;
 	$(document).ready(function() {
 
 		$('#inputNome').bootcomplete({
-			url:'/sistema/recursos/nome/json',
+			url:'<?php echo BASE_SISTEMA ?>recursos/nome/json',
 			minLength : 3
 		});
 

@@ -1,0 +1,16 @@
+npm install vue
+
+npm install vuefy
+
+#------
+
+https://itnext.io/vuejs-and-webpack-4-from-scratch-part-1-94c9c28a534a
+
+npm install --save vue vue-router
+
+npm install --save-dev webpack webpack-cli
+
+npm run-script build
+
+
+npm init
