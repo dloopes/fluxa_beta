@@ -67,7 +67,7 @@
             <div class="col-xs-8">
                          <div class="form-group" v-if="post_type=='iniciativa' ">  
                               
-                                <label for="f_detalhe" >Objetivo</label>
+                                <label for="f_detalhe" >Objetivo Central da Narrativa</label>
                                           
                                             <input class="form-control" v-model="form.dados.objetivo" name="f_dados_objetivo" 
                                              id="f_dados_objetivo"  >
@@ -115,7 +115,7 @@
 
        <div class="col-xs-4">
                   <div class="form-group">  
-                              <label for="f_dimensao">Dimensão </label>
+                              <label for="f_dimensao">Dimensão Principal da Iniciativa</label>
                                 <select class="form-control" name="f_id_categoria" 
                                              id="f_id_categoria" v-model="form.id_categoria">
                                              <option :value="item.id" v-for="(item, index) in list_categorias" :key="index">{{item.nome}}</option>
@@ -130,7 +130,7 @@
 
        <div class="col-xs-8">
                  <div class="form-group">  
-                                  <label for="f_recursos">Recursos</label>
+                                  <label for="f_recursos">Selecione os Integrantes</label>
                                    <input class="form-control" name="f_recursos" 
                                    id="f_recursos" v-model="form.dados.recursos"
                                 type="text" placeholder="Recursos" > {{exibe_error('recursos')}}
@@ -196,7 +196,7 @@ Vue.component('recurso_list', RecursoList );
 
 
 <section class="col-xs-12" style="margin-top: 10px" v-if="form.id != null && parseInt(form.id) > 0 ">
-<div class="box"><div class="box-header with-border">Potencialidades e Possibilidades</div> 
+<div class="box"><div class="box-header with-border">Relacione as Potencialidades e Possibilidades dessa Iniciativa</div> 
 <div class="box-body">
 
     <recurso_associacao
@@ -207,7 +207,7 @@ Vue.component('recurso_list', RecursoList );
 </div>
 </section>
 <section class="col-xs-12" style="margin-top: 10px" v-if="form.id != null && parseInt(form.id) > 0 ">
-<div class="box"><div class="box-header with-border">Upload de arquivos</div> 
+<div class="box"><div class="box-header with-border">Drive da Inicitiva - Insira os Documentos da Iniciativa</div> 
 <div class="box-body">
 
     <upload-folder
