@@ -28,8 +28,8 @@ class ArquivoDao{
         
     }
     
-    public function getList($oConn, $id_registro, $nome_tabela ){
-        $sql = "select * from arquivo where id_registro = ".$id_registro. " and id_tabela='".$nome_tabela."' order by id desc ";
+    public function getList($oConn, $id_registro, $nome_tabela , $order_by = " order by id desc  "){
+        $sql = "select * from arquivo where id_registro = ".$id_registro. " and id_tabela='".$nome_tabela."'  ".  $order_by;
         
         $itens =  connAccess::fetchData($oConn, $sql);
 
@@ -101,7 +101,7 @@ class ArquivoDao{
                             return $process . "?img=../../".$minha_foto."&x=280&y=150";
             }
             
-            return $base_path."/".$pasta."/".$item->id_registro."/".$arquivo;
+            return $base_path."".$pasta."/".$item->id_registro."/".$arquivo;
            
        }
 
@@ -116,7 +116,7 @@ class ArquivoDao{
             
             $pasta = "clientes";
             
-            return $base_path."/".$pasta."/".$id_cliente."/".$arquivo;
+            return $base_path."".$pasta."/".$id_cliente."/".$arquivo;
            
        }
 }

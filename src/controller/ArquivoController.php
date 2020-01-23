@@ -36,7 +36,7 @@ class ArquivoController  extends BaseController{
           public function index(Request  $request, Response  $response, $args)
           {
 
-                      $dao = new \Fluxa\Persistence\ArquivoDao();
+                      $dao = new \Fluxa\Persistence\ArquivoDAO();
                       $oConn = new \library\persist\PDOConnection(); 
 
                        $id_tabela =$request->getQueryParam('id_tabela');
@@ -61,7 +61,7 @@ class ArquivoController  extends BaseController{
                {
 
                       $id = $request->getAttribute('id');
-                      $dao = new \Fluxa\Persistence\ArquivoDao();
+                      $dao = new \Fluxa\Persistence\ArquivoDAO();
                       $oConn = new \library\persist\PDOConnection(); 
                       
                       $reg = connAccess::fastOne($oConn, "arquivo", " id = ". $id );
@@ -124,7 +124,7 @@ class ArquivoController  extends BaseController{
                       if ( $type_image == "")
                           $type_image = "midia";
                       
-                      $dao = new \Fluxa\Persistence\ArquivoDao();
+                      $dao = new \Fluxa\Persistence\ArquivoDAO();
                       $oConn = new \library\persist\PDOConnection(); 
                       
                       $dao->garantePasta($tipo, $parent_id);

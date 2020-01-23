@@ -309,7 +309,7 @@ class RecursoDAO {
             
             $registro = \library\persist\connAccess::fastOne($oConn, "recurso", " id = ". $id);
             $registro_dados =  \library\persist\connAccess::fastOne($oConn, "recurso_dados", " id = ". $id);
-            
+            $registro["status_nome"] = EnumRecursoStatus::getValueView($registro["status"] );
             $registro["dados"] = $registro_dados;
             
             return $registro;

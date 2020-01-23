@@ -475,10 +475,16 @@ class RecursoController extends BaseController{
                $id_usuario_api = $GLOBALS["id_usuario_api"];
 	       $tipo_recurso = $request->getQueryParam('tipo_recurso');
 	       $minhas = $request->getQueryParam('minhas');
+	       $paginacao = $request->getQueryParam('paginacao');
+	       $pagina = $request->getQueryParam('pagina');
+	       $qtde_por_pagina = $request->getQueryParam('qtde_por_pagina');
                
                
                       $oConn = new \library\persist\PDOConnection(); 
                       $dao = new \Fluxa\Persistence\RecursoDAO();
+                      $ArqDao = new \Fluxa\Persistence\ArquivoDAO();
+
+                       $process = constant("BASE_THUMB_PROCESS");
             
                $filtro = "";
                $order = " id "; $order_type = "desc";
@@ -489,7 +495,7 @@ class RecursoController extends BaseController{
                }
                
                if ( $tipo_recurso != ""){
-                   $filtro .= " and  p.tipo_recurso = '".$tipo_recurso."' ";
+                   $filtro .= " and  upper(p.tipo_recurso) = upper( '".$tipo_recurso."' ) ";
                }
                
                if ( $minhas == "1" && $id_usuario_api != ""){
@@ -498,23 +504,59 @@ class RecursoController extends BaseController{
                
                //$id_usuario_api
                
+               $limitacao = ""; $qtde_total = 0;
+               
+               if ( $paginacao ){
+                   $sql = "select count(*) as res 
+                                from recurso p 
+                                   left join recurso_dados da on da.id = p.id "
+                        . "        left join recurso_categoria ca on ca.id = p.id_categoria
+                                  where 1 = 1 ". $filtro;
+                   $qtde_total = \library\persist\connAccess::executeScalar($oConn, $sql);
+                   
+                   if ( $qtde_por_pagina == ""){
+                       $qtde_por_pagina= 10;
+                   }
+                   if ( $pagina == ""){
+                       $pagina= 1;
+                   }
+                   $inicio = 0; $fim = 0;
+                   
+                   \library\PaginationService::SetaRsetPaginacao($qtde_por_pagina, $pagina, $qtde_total, $inicio, $fim);
+                   $limitacao = " limit " . $inicio.", ".$qtde_por_pagina;
+               }
+               
                
                 $sql = "select p.*, ca.nome as nome_dimensao, da.categoria, da.objetivo, '' as blnk "
                         . " from recurso p left join recurso_dados da on da.id = p.id "
                         . " left join recurso_categoria ca on ca.id = p.id_categoria "
-                        . "  where 1 = 1 ". $filtro . " order by ".$order. " ".$order_type ;
+                        . "  where 1 = 1 ". $filtro . " order by ".$order. " ".$order_type . $limitacao;
                 $itens = \library\persist\connAccess::fetchData($oConn, $sql);
                 
+                  if (! $paginacao ){
+                      $qtde_total = count($itens);
+                      
+                  }
                 for ( $i = 0; $i < count($itens); $i++ ){
                     $item = &$itens[$i];
                     
                     $item["status"] = EnumRecursoStatus::getValueView($item["status"]);
+
+                    if ( $paginacao ){
+                    	$lst_arquivo =  $ArqDao->getList($oConn, $item["id"], "recurso" ," and type like '%image%' order by id desc limit 0, 1 ");
+                    	if ( count($lst_arquivo) > 0  ){
+                    		$item["image_url"] = $ArqDao->getURL( $lst_arquivo[0] , $lst_arquivo[0]["arquivo"],
+                    		                   $process, true ); // $lst_arquivo[0]["arquivo"];
+                    	}
+                    }
                 }
                 
                 $saida = array(
                              "qtde"=> count($itens),
+                             "total"=>$qtde_total,
                              "data" => $itens ,
-                            // "sql" => $sql
+                        
+                             "sql" => $sql
                         );
                          
                 return $this->sendResponse($response, $saida);        
@@ -549,16 +591,24 @@ class RecursoController extends BaseController{
 
                       $oConn = new \library\persist\PDOConnection(); 
                       $dao = new \Fluxa\Persistence\RecursoDAO();
+                      $daoArquivo = new \Fluxa\Persistence\ArquivoDAO();
+                      
                       
 		      $id = $request->getAttribute('id');
                       
                       
 		      $reg = $dao->getByIdApi($oConn, $id); // RecursoDados::find($id);
 
+                      $ls_arquivos = $daoArquivo->getList($oConn, $id, "recurso", " and type like '%image%' order by id asc ");
+                      
+                       $process = constant("BASE_THUMB_PROCESS");
+                      if ( count($ls_arquivos) > 0 ){
+                          $reg["image_url"] = $daoArquivo->getURL( (object)$ls_arquivos[0], $ls_arquivos[0]["arquivo"], $process, false);
+                      }
                   //    return array( "code" =>  1,  "data"=> $reg, "item"=> $reg);
                       
                       
-                 return $this->sendResponse($response, array("item" =>  $reg, "data" => $reg) );
+                 return $this->sendResponse($response, array("item" =>  $reg, "data" => $reg, "qtde_arquivos" => count($ls_arquivos)) );
           }
         
        
@@ -684,7 +734,7 @@ class RecursoController extends BaseController{
 
                             }
                             
-                            
+                           
                       return $this->sendResponse($response, $saida );
                   
               }
@@ -694,6 +744,15 @@ class RecursoController extends BaseController{
             
             return $this->view->render($response, "TemplatePainel.php", [
 			"pagina" => "MinhasIniciativas.php"
+			]);
+            
+        }
+
+
+        public function getViewListaIniciativas($request, $response, $args) {
+            
+            return $this->view->render($response, "TemplatePainel.php", [
+			"pagina" => "ListaIniciativa.php"
 			]);
             
         }

@@ -37,6 +37,10 @@ $librares = glob(__DIR__ . '/src/library/persist/*.php');
 foreach ($librares as $router) {
 	require $router;
 }
+$librares = glob(__DIR__ . '/src/library/*.php');
+foreach ($librares as $router) {
+	require $router;
+}
 
 //Carregando as rotas
 $routers = glob(__DIR__ . '/routers/*.router.php');

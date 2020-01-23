@@ -2,17 +2,17 @@
   <div>
      <div  class="col-xs-12" >
 
-        <div class="box" >
-         <div class="box-body">
+        <div :class="getEstilo('box')" >
+         <div :class="getEstilo('box-body')">
 
         <h5 v-html="titulo"></h5>
-        <md-button
+        <button
           class="md-default"
-          v-if="false"
+          v-if="show_botao_upload"
           v-on:click="botao_mostra_upload"
-        >Adicionar Arquivos</md-button>
+        >Adicionar Arquivos</button>
 
-        <upload :p_parentid="id_registro" :ptype="id_tabela" v-bind:onSave="onSave"></upload>
+        <upload :p_parentid="id_registro" :ptype="id_tabela" v-bind:onSave="onSave"  v-if="show_botao_upload"></upload>
 
         <div class="md-layout" v-if="loading">
           <div class="md-layout-item md-size-100">
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="col-xs-12">
-          <div v-for="(item, index) in items " :key="index" class="col-xs-3">
+          <div v-for="(item, index) in items " :key="index" :class="'col-xs-' + (tamanho_coluna != null && tamanho_coluna != undefined ? tamanho_coluna.toString() : '3') ">
             <div v-if="item.type.indexOf('image') > -1 ">
               <img v-bind:src="item.url_thumb" style="max-height: 70px; max-width: 70px; " />
             </div>
@@ -29,7 +29,8 @@
               <i class="fa fa-files-o" aria-hidden="true"></i>
             </div>
             <a :href="item.url" target="_blank">{{item.titulo}}</a>
-            <a href="#!" v-on:click="remover(item, index)">
+            <a href="#!" v-on:click="remover(item, index)"  
+                       v-if="show_botao_upload">
               <i class="fa fa-trash-o" aria-hidden="true"></i>
             </a>
           </div>
@@ -54,7 +55,9 @@ export default {
     "pShowUpload",
     "unique_id",
     "titulo",
-    "onLoadData"
+    "onLoadData",
+    "tamanho_coluna",
+    "box_estilo",
   ],
 
   data: function() {
@@ -68,13 +71,26 @@ export default {
       loading: false,
       msg_status: "Carregando",
       v_visivel_upload: false,
-      img_loading: "loading.gif"
+      img_loading: "loading.gif",
+      show_botao_upload: true
     };
   },
   mounted() {
+     if (this.pShowUpload != null && this.pShowUpload == false) {
+       this.show_botao_upload = false;
+     }
+
     this.loadData();
   },
   methods: {
+    getEstilo(estilo){
+      if ( this.box_estilo == null || this.box_estilo == undefined || this.box_estilo ){
+        return estilo;
+      }
+
+      return "";
+
+    },
     loadData() {
       var self = this;
       self.loading = true;
@@ -99,7 +115,7 @@ export default {
       return this.unique_id + tip;
     },
 
-    show_botao_upload() {
+    show_botao_upload_old() {
       if (this.pShowUpload != null && this.pShowUpload == "false") {
         return false;
       }

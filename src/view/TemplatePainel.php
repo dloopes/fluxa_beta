@@ -32,6 +32,7 @@ use Fluxa\Business\UsuarioBusiness;
      <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>dist/css/painel.css">
      <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>lib/jquery-ui/themes/base/autocomplete.css">
 
+     <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>lib/gallery/pagination.css">
 
      <link href="<?php echo URI_SISTEMA ?>dist/js/datatables/jquery.dataTables.min.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -86,6 +87,8 @@ use Fluxa\Business\UsuarioBusiness;
 
 <script src="<?php echo URI_SISTEMA ?>dist/js/bootbox.min.js"></script>
 <script src="<?php echo URI_SISTEMA ?>dist/js/sweetalert/sweetalert2.all.min.js"></script>
+
+<script src="<?php echo URI_SISTEMA ?>lib/gallery/pagination.js?g=999"></script>
 <script type="text/javascript">
 window.K_AUTHORIZATION = "<?php echo UsuarioBusiness::getAuthorizationApi() ?>";    
 window.URL_API = "<?= URL_API ?>";    
@@ -242,7 +245,7 @@ window.URL_API = "<?= URL_API ?>";
             </span>
           </a>
           <ul class="treeview-menu">
-            <li style="display:none"><a href="<?php echo URI_SISTEMA ?>iniciativas"><i class="fa fa-circle-o text-aqua"></i> Buscar Iniciativas</a></li>
+            <li ><a href="<?php echo URI_SISTEMA ?>iniciativas"><i class="fa fa-circle-o text-aqua"></i> Buscar Iniciativas</a></li>
             <li><a href="<?php echo URI_SISTEMA ?>iniciativas_my"><i class="fa fa-circle-o text-green"></i> Minhas Iniciativas</a></li>
           </ul>
         </li>

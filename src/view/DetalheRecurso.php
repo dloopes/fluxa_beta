@@ -67,10 +67,10 @@ use Fluxa\Entity\EnumTiposFluxo;
 			<?php
 			if($recurso->getUsuario()->getId() != $_SESSION['id']){
 	        	?>						            	
-	        	<form method="POST" action="/sistema/fluxo" id=<?php echo("form_"+$recurso->getId())?>> 
+	        	<form method="POST" action="/sistema/fluxo" id=<?php echo("form_".$recurso->getId())?>> 
 	        		<div class="text-left">
 		        		<input type="hidden" name="id_recurso" value=<?php echo($recurso->getId())?> /> 
-		        	 	<input type="button" style="min-width: 150px;" class="btn btn-success btn-flat" title="Fluxar" onclick="sendFormFluxo(<?php echo("form_"+$recurso->getId())?>);" value="Fluxar"/>
+		        	 	<input type="button" style="min-width: 150px;" class="btn btn-success btn-flat" title="Fluxar" onclick="sendFormFluxo(<?php echo("form_".$recurso->getId())?>);" value="Fluxar"/>
 	        	 	</div>
 	        	</form>	
 	        	<?php

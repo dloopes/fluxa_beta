@@ -60,6 +60,12 @@ $app->get('/iniciativas_my', function (Request $request, Response $response, arr
 });
 
 
+$app->get('/iniciativas', function (Request $request, Response $response, array $args) {
+	$controller = new RecursoController($this->view);	
+	return $controller->getViewListaIniciativas($request, $response, $args);
+});
+
+
 
 $app->get('/recursos/nome/json', function (Request $request, Response $response, array $args) {		
 	$controller = new RecursoController($this->view);

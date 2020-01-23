@@ -1,0 +1,5 @@
+http://pagination.js.org/
+
+LightBox
+
+https://lokeshdhakar.com/projects/lightbox2/
