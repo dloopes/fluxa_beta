@@ -429,11 +429,22 @@ window.URL_API = "<?= URL_API ?>";
 
     function sendFormFluxo(formId){
 
-        var form = document.getElementById(formId);
+         
+        var p_form = formId;
+        if (  typeof formId === "string"){
+            
+             p_form =  document.getElementById(formId);
+        }
+        
+        if ( p_form == null || p_form == undefined ){
+            alert("Form não localizado com a id " + formId );
+            return false;
+        }
 
+        //alert(p_form);
         bootbox.confirm("Você realmente deseja gerar um novo fluxo?", function(result) {
           if(result){
-            form.submit();
+            p_form.submit();
           }     
         }); 
       }

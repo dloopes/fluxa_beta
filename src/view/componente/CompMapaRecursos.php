@@ -55,6 +55,8 @@ class CompMapaRecursos implements IComponente {
     }
 
     public function imprimeHTML($showHeaderMap = true) {
+       // echo("<pre>"); print_r( $this->listaPossibilidade ); echo("</pre>");
+       // echo("<pre>"); print_r( $this->listaPotencialidade ); echo("</pre>");
         ?>
         <section class="content">	
 			<div class="row">
@@ -76,8 +78,12 @@ class CompMapaRecursos implements IComponente {
 		</section>
 
 		<script type="text/javascript">
-   
+                    
+                            var markers = [];
 			function initMap() {
+                            
+                            
+                            $(document).ready(function() {
 
 				var map = new google.maps.Map(document.getElementById('map'), {
 					zoom: <?= $this->zoomDefault ?>,
@@ -93,6 +99,7 @@ class CompMapaRecursos implements IComponente {
 					<?php
 
 					foreach($this->listaPotencialidade as $recurso) {
+                                            
 
 						$endereco = $recurso->getEndereco();
 
@@ -124,7 +131,7 @@ class CompMapaRecursos implements IComponente {
 						            <?php 
 						            if($usuario->getId() != $_SESSION['id'] && is_numeric($recurso->getId())){
 						            	?>						            	
-						            	'<form method="POST" action="/sistema/fluxo" id="<?php echo("form_".$recurso->getId())?>">'+ 
+						            	'<form method="POST" action="<?php echo BASE_SISTEMA ?>fluxo" id="<?php echo("form_".$recurso->getId())?>">'+ 
 						            		'<input type="hidden" name="id_recurso" value="<?php echo($recurso->getId())?>" />'+ 
 						            	 	'<input type="button" style="min-width: 100px;" class="btn btn-success btn-sm" title="Fluxar" onclick="sendFormFluxo(\'<?php echo("form_". $recurso->getId())?>\');" value="Fluxar"/>'+ 
 						            	'</form>'+ 							            
@@ -180,7 +187,7 @@ class CompMapaRecursos implements IComponente {
 						            <?php 
 						            if($usuario->getId() != $_SESSION['id']){
 						            	?>						            	
-						            	'<form method="POST" action="/sistema/fluxo" id=<?php echo("form_".$recurso->getId())?>>'+ 
+						            	'<form method="POST" action="<?php echo BASE_SISTEMA ?>fluxo" id="<?php echo("form_".$recurso->getId())?>">'+ 
 						            		'<input type="hidden" name="id_recurso" value=<?php echo($recurso->getId())?> />'+ 
 						            	 	'<input type="button" style="min-width: 100px;" class="btn btn-success btn-sm" title="Fluxar" onclick="sendFormFluxo(<?php echo("form_".$recurso->getId())?>);" value="Fluxar"/>'+ 
 						            	'</form>'+ 							            
@@ -204,6 +211,8 @@ class CompMapaRecursos implements IComponente {
 				// Add a marker clusterer to manage the markers.
 				var markerCluster = new MarkerClusterer(map, markers,
 				  {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+                                  
+                                  });
 			}
 
 			function attachSecretMessage(marker, secretMessage) {
@@ -230,10 +239,8 @@ class CompMapaRecursos implements IComponente {
 
 		</script>
         
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQZKTit2ice6KDwHxAc5iQVZQhoBwimjw&callback=initMap">
-		
-		</script>
-		<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>      
+		<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>  
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQZKTit2ice6KDwHxAc5iQVZQhoBwimjw&callback=initMap"></script>    
 		<?php
     }
 }

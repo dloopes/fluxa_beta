@@ -18,6 +18,8 @@ class FluxoDAO {
 			$strSQL .= "VALUES (:id_usuario_oferece, :id_usuario_necessita, :id_recurso, :status)";
 
 			$preSQL = ConexaoPDO::getInstance()->prepare($strSQL);
+                        
+                      //  print_r( $fluxo ); die(" ");
 
 			$preSQL->bindValue(":id_usuario_oferece", $fluxo->getIdUsuarioOferece());
 			$preSQL->bindValue(":id_usuario_necessita", $fluxo->getIdUsuarioNecessita());

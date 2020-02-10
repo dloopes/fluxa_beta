@@ -11,8 +11,8 @@ use Fluxa\Entity\Fluxo;
 	</h1>
 
 	<ol class="breadcrumb">
-		<li><a href="/sistema/painel"><i class="fa fa-th"></i> Painel</a></li>
-		<li><a href="/sistema/fluxos">Meus Fluxos</a></li>
+		<li><a href="<?php echo BASE_SISTEMA ?>painel"><i class="fa fa-th"></i> Painel</a></li>
+		<li><a href="<?php echo BASE_SISTEMA ?>fluxos">Meus Fluxos</a></li>
 	</ol>
 </section>
 
@@ -97,7 +97,7 @@ use Fluxa\Entity\Fluxo;
 					?>
 					<!-- /.box-footer -->
 					<div class="box-footer">
-						<form method="POST" action="/sistema/fluxo/mensagem">
+						<form method="POST" action="<?php echo BASE_SISTEMA ?>fluxo/mensagem">
 							<img class="img-responsive img-circle img-sm" src=<?= $_SESSION['image']?>>
 							<!-- .img-push is used to add margin to elements next to floating images -->
 							<div class="img-push">
@@ -123,7 +123,7 @@ use Fluxa\Entity\Fluxo;
 			$fluxo->getStatus() === Fluxo::STATUS_POTENCIAL && $fluxo->getUsuarioRecebeuFluxo()->getId() == $_SESSION['id']
 		){
 			?>
-			<form method="POST" action="/sistema/fluxo/status/">
+			<form method="POST" action="<?php echo BASE_SISTEMA ?>fluxo/status/">
 				<div class="text-left">
 					<input type="hidden" name="id_fluxo" value=<?= $fluxo->getId()?>>
 					<button type="submit" class="btn btn-primary btn-flat" name="opcao" value="1"><i class="fa fa-thumbs-o-up"></i> Fluxado (De Acordo)</button>
