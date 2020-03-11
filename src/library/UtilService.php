@@ -359,18 +359,18 @@ namespace library;
    public static function request($nome, $trataInject = 0)
 	   {
 	     if ( 
-	       Util::getGET($nome)!="")
+	       self::getGET($nome)!="")
 		   {
 		   
-			return Util::anti_sql_injection(  Util::getGET($nome) );
+			return self::anti_sql_injection(  self::getGET($nome) );
 		   	
 		   }
 		   else
 		   {
 		   		if ( $trataInject )
-				   return Util::anti_sql_injection( Util::getPOST($nome) );				
+				   return self::anti_sql_injection( self::getPOST($nome) );				
 			    else
-				    return Util::getPOST($nome);
+				    return self::getPOST($nome);
 		   }
 	   
    }
@@ -386,11 +386,11 @@ namespace library;
                 
             
 		if ( $nota <= 8  )
-			return "<b style='color:red;".$estilo."'>". Util::NVL( Util::numeroTela( $nota, 1 )," 0")."</b>";	
+			return "<b style='color:red;".$estilo."'>". self::NVL( self::numeroTela( $nota, 1 )," 0")."</b>";	
 		
 		//&& $nota > 0
 		if ( $nota > 8  )
-		return "<b style='color:blue".$estilo."'>".Util::numeroTela($nota, 1 )."</b>";
+		return "<b style='color:blue".$estilo."'>".self::numeroTela($nota, 1 )."</b>";
 	}
 
 
@@ -403,7 +403,7 @@ namespace library;
 		    
 	    //$str = function_exists('pg_real_escape_string') ? pg_real_escape_string($str) : pg_escape_string($str);
 			
-		return Util::anti_injection( $str );
+		return self::anti_injection( $str );
 	}
 	
 	public static function anti_injection($sql)
@@ -596,7 +596,7 @@ namespace library;
 	   
 	      $selec = $value == $sel  ?" selected " : "";
 	   
-		echo "<option $selec value=\"$value\">" . Util::acento_para_html( $texto ) . "</option>";
+		echo "<option $selec value=\"$value\">" . self::acento_para_html( $texto ) . "</option>";
        }
 	public static function populaCombo2($value, $texto, $sel=""){
 		
@@ -696,7 +696,7 @@ namespace library;
   
    public  static function ischecked($condicao)
   {
-  	   return Util::iif($condicao,"checked","");
+  	   return self::iif($condicao,"checked","");
   }
   
   
@@ -800,14 +800,14 @@ public static function getCurrentBDdate()
 	  {
 	      if ( $addSelecione)
 		  {
-		       Util::populaCombo("", "-- SELECIONE --","");
+		       self::populaCombo("", "-- SELECIONE --","");
 		  }
-            //Util::Alert($total."----");
+            //self::Alert($total."----");
 	       for ($z =0; $z< $total; $z++)
 	       {
 				   $it = &$obj->items[$z];
 				
-				    Util::populaCombo($it->get_data($valor), $it->get_data($texto),$sel);				
+				    self::populaCombo($it->get_data($valor), $it->get_data($texto),$sel);				
 		    }
 	  } 
 
@@ -815,13 +815,13 @@ public static function getCurrentBDdate()
 public static function CarregaComboArray(&$ar, $Campo1, $Campo2,  $sel, $select = false)
 {
 		if ($select)
-			Util::populaCombo(""," -- SELECIONE -- ", "");
+			self::populaCombo(""," -- SELECIONE -- ", "");
 	
 		for ( $i =0 ; $i < count( $ar )  ; $i++)
 		{
 			$arr = $ar[$i];
 			
-			Util::populaCombo($arr[$Campo1], $arr[$Campo2], $sel);
+			self::populaCombo($arr[$Campo1], $arr[$Campo2], $sel);
 		}
 }
 
@@ -845,13 +845,13 @@ public static function getPaginaParametros(){
  $parametros = "";
    foreach( $_POST as $key=>$value){
 	
-	$parametros =Util::AdicionaStr($parametros,$key."=".$value,"&");
+	$parametros =self::AdicionaStr($parametros,$key."=".$value,"&");
 
  } 
 
 		foreach( $_GET as $key=>$value){
 			
-			$parametros =Util::AdicionaStr($parametros,$key."=".$value,"&");
+			$parametros =self::AdicionaStr($parametros,$key."=".$value,"&");
 
 		} 
 		
@@ -984,8 +984,8 @@ public static function limitaQuebra($string,$num)
 			if ( strpos(" ".$key,"'"))
 				continue;
 				
-				if ( count($arr) == 0 || !Util::existeInArray($arr,$key))
-			{	$pag.=$sep.$key.'='.Util::anti_sql_injection( $value );
+				if ( count($arr) == 0 || !self::existeInArray($arr,$key))
+			{	$pag.=$sep.$key.'='.self::anti_sql_injection( $value );
 					$sep= "&";
 				}			
 				  
@@ -1000,8 +1000,8 @@ public static function limitaQuebra($string,$num)
 				continue;
 			
 				
-				if ( count($arr) == 0 || !Util::existeInArray($arr,$key))
-			{	$pag.=$sep.$key.'='.Util::anti_sql_injection( $value) ;
+				if ( count($arr) == 0 || !self::existeInArray($arr,$key))
+			{	$pag.=$sep.$key.'='.self::anti_sql_injection( $value) ;
 					$sep= "&";
 				}			
 				  
@@ -1027,9 +1027,9 @@ public static function limitaQuebra($string,$num)
 		      continue;
 		
 		
-			if ( Util::getPOST($key) != "")
+			if ( self::getPOST($key) != "")
 		    {
-				$parametros[$key] = Util::request($key);
+				$parametros[$key] = self::request($key);
 		    }	
 		}
 	    }
@@ -1047,10 +1047,10 @@ public static function limitaQuebra($string,$num)
 			if ( $cont <= 2)
 				continue;
 				
-			if ( ( count($arr) == 0 || !Util::existeInArray($arr,$key) ) 
-					&&  Util::indexParam($key,Util::NVL( $pag, " ")) < 0
+			if ( ( count($arr) == 0 || !self::existeInArray($arr,$key) ) 
+					&&  self::indexParam($key,self::NVL( $pag, " ")) < 0
 						 )
-			{	$pag.=$sep.$key.'/'.Util::anti_sql_injection( $value ) ;
+			{	$pag.=$sep.$key.'/'.self::anti_sql_injection( $value ) ;
 				$sep= "/";
 			}			
 			$arrr = array_merge($arr2, array($key=>$value));
@@ -1072,7 +1072,7 @@ public static function limitaQuebra($string,$num)
 		$var = str_replace("=","&",$var);
 		$arr = explode("&",$var);
 		
-		if ( Util::existeInArray($arr, $valor))
+		if ( self::existeInArray($arr, $valor))
 			return 1;
 		else
 			return -1;
@@ -1093,14 +1093,14 @@ public static function limitaQuebra($string,$num)
 			}
 			
 			if ( $ehNum )
-				$vv = Util::numeroTela( $vv , $idd );
+				$vv = self::numeroTela( $vv , $idd );
 			
 			if ( $format ){
 				$vv = str_replace("'","",	$vv);
 				$vv = str_replace($sep,"+",	$vv);
 			}
 			
-			$str = Util::AdicionaStr($str, $vv,$sep );	
+			$str = self::AdicionaStr($str, $vv,$sep );	
 		}	
 		
 		return $str;
@@ -1120,9 +1120,9 @@ public static function limitaQuebra($string,$num)
 			}
 			
 			if ( $ehNum )
-				$vv = Util::numeroTela( $vv , $idd );
+				$vv = self::numeroTela( $vv , $idd );
 			
-			$str = Util::AdicionaStr($str, $vv,$sep );	
+			$str = self::AdicionaStr($str, $vv,$sep );	
 		}	
 		
 		return $str;
@@ -1190,9 +1190,9 @@ public static function limitaQuebra($string,$num)
 			}
 			
 			if ( $ehNum )
-				$vv = Util::numeroTela( $vv , $idd );
+				$vv = self::numeroTela( $vv , $idd );
 			
-			$str = Util::AdicionaStr($str, $vv,$sep );	
+			$str = self::AdicionaStr($str, $vv,$sep );	
 		}	
 		
 		return $str;
@@ -1228,7 +1228,7 @@ public static function limitaQuebra($string,$num)
 			   if (empty($val)) 
 				 {   return  $valor;  }
 				 
-		if (!Util::existeInArray( explode($sep,$Str ),$valor) )
+		if (!self::existeInArray( explode($sep,$Str ),$valor) )
 			 {	 
 			
 			return  $Str . $sep . $valor;
@@ -1262,7 +1262,7 @@ End Function
 	   {
 			 if ( trim($arr[$z]) != trim($valor) )
 			 {
-				   $novoValor = Util::AdicionaStr($novoValor, $arr[$z]); 
+				   $novoValor = self::AdicionaStr($novoValor, $arr[$z]); 
 			    } 
 	    }
 	

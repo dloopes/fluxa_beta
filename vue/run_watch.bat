@@ -1,5 +1,5 @@
 D:\
 
-cd D:\Unidade G\Sistemas\Projetos Web\Marisa Trev\Projeto\AtivaRaft\AtivaRaft.WEB\vue
+cd F:\OpenServers\apache_php5\www\diogo_loopes\fluxa_beta\vue
 
 npm run-script watch

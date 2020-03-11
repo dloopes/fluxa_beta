@@ -1,6 +1,6 @@
 <template>
 <div>
-<div class="col-xs-12 col-md-12" >
+<div class="col-xs-12 col-md-12" :style="estilo_lista()" >
    <div class="col-xs-12 col-md-12" >
 
        <div class="input-group">
@@ -32,8 +32,16 @@
                                       <p ><b v-html="item.nome"></b> </p>
                                       <p ><b>Categoria: </b> <span v-html="item.categoria"></span></p>
                                       <p ><b>Status: </b> <span v-html="item.status"></span></p>
+                                    
+                                      
                                  </div>
                                  </a>
+                                 
+                                 <div class="caption">
+                                      <p > <button type="button" class="btn btn-success btn-flat" style="min-width: 150px;"
+                                         v-if="item.id_usuario != null && id_user_my != null && id_user_my.toString() != item.id_usuario.toString()"
+                                      v-on:click="call_fluxar(item)">Fluxar</button>   </p>
+                                 </div>
                     </div>
 
 
@@ -48,6 +56,11 @@
     
   
   
+</div>
+<div class="col-xs-12 col-md-12" v-if="acao=='form' && id_load != null " >
+
+                              <visualizar2 :id_load="id_load" :onBack="onBackVisualizar" ></visualizar2>
+
 </div>
 
      
@@ -64,7 +77,7 @@
                         <h4 class="modal-title">{{titulo}}</h4>
                     </div>
                     <div >   <!-- class="modal-body" -->
-                         <div  v-if="acao=='form' && id_load != null "  >
+                         <div  v-if="false && acao=='form' && id_load != null "  >
                               <visualizar :id_load="id_load" ></visualizar>
                               
                          </div>
@@ -82,10 +95,12 @@
 </template>
 <script>
 import visualizar from './Visualizar.vue';
+import visualizar2 from './Visualizar2.vue';
 export default {
 
          components:{
-             visualizar
+             visualizar,
+             visualizar2
          },
 
 
@@ -105,10 +120,54 @@ export default {
                                     acao: "listar",
                                     loading: false,
                                     titulo: "",
+                                    id_user_my: null,
                                     
             }
         },
         methods:{
+
+            onBackVisualizar(){
+                     this.acao = "listar";
+            },
+
+            estilo_lista(){
+
+                if ( this.acao == "listar"){
+                    return "";
+                }
+
+                return "display:none"
+
+            },
+
+            call_fluxar(item){
+
+                 
+                 var data = {
+                         "retorno": "json",
+                         "id_recurso": item.id,
+                         "my_user_id": this.id_user_my
+                 }
+
+                 
+                         obj_api.call("fluxo", "POST", data , function(response){
+                              var retorno = response;
+                              
+                              //Vou encaminhar este usuário para a tela de fluxo..
+                              document.location.href= retorno.url;
+                         });
+
+
+                      //chame aqui o modal para fluxar ou o que for feito no outro...
+                      /*
+                      <form method="POST" action="/sistema/fluxo" id=<?php echo("form_".$recurso->getId())?>> 
+	        		<div class="text-left">
+		        		<input type="hidden" name="id_recurso" value=<?php echo($recurso->getId())?> /> 
+		        	 	<input type="button" style="min-width: 150px;" class="btn btn-success btn-flat" title="Fluxar" onclick="sendFormFluxo(<?php echo("form_".$recurso->getId())?>);" value="Fluxar"/>
+	        	 	</div>
+	        	</form>	
+                  */
+            },
 
               getID(tip){
                 return this.unique_id + tip;
@@ -125,7 +184,7 @@ export default {
 
                          self.id_load = item.id;
                          self.titulo = item.nome;
-                         $("#myModal").modal();
+                      //   $("#myModal").modal();
                 }, 100);
             },
             create_pagination(response){
@@ -182,6 +241,7 @@ export default {
 
     
         mounted() {
+                 this.id_user_my = window.K_USER_ID;
 
                  this.load_data(true);
 

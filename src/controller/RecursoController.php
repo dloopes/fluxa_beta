@@ -11,6 +11,7 @@ use Fluxa\Business\EnderecoBusiness;
 use Fluxa\Exception\BusinessException;
 use Fluxa\Exception\ControlerException;
 use Fluxa\Controller\BaseController;
+use Fluxa\Business\UsuarioBusiness;
 
 class RecursoController extends BaseController{
 
@@ -536,21 +537,29 @@ class RecursoController extends BaseController{
                   if (! $paginacao ){
                       $qtde_total = count($itens);
                       
-                  }
+		}
+				  
+		$listaStatus = $this->getListaStatus();
                 for ( $i = 0; $i < count($itens); $i++ ){
-                    $item = &$itens[$i];
-                    
-                    $item["status"] = EnumRecursoStatus::getValueView($item["status"]);
+					$item = &$itens[$i];
+					
+					$nome_staus = "A realizado";
 
-                    if ( $paginacao ){
-                    	$lst_arquivo =  $ArqDao->getList($oConn, $item["id"], "recurso" ," and type like '%image%' order by id desc limit 0, 1 ");
-                    	if ( count($lst_arquivo) > 0  ){
-                    		$item["image_url"] = $ArqDao->getURL( $lst_arquivo[0] , $lst_arquivo[0]["arquivo"],
-                    		                   $process, true ); // $lst_arquivo[0]["arquivo"];
-                    	}
-                    }
+                                        $nome_staus = \library\UtilService::getDescByCOD($listaStatus, "id", "nome",  $item["status"]);
+                                        $item["status"] = $nome_staus;
+                                                //EnumRecursoStatus::getValueView($item["status"]);
+
+                                        if ( $paginacao ){
+                                            $lst_arquivo =  $ArqDao->getList($oConn, $item["id"], "recurso" ," and type like '%image%' order by id desc limit 0, 1 ");
+                                            if ( count($lst_arquivo) > 0  ){
+                                                    $item["image_url"] = $ArqDao->getURL( $lst_arquivo[0] , $lst_arquivo[0]["arquivo"],
+                                                                       $process, true ); // $lst_arquivo[0]["arquivo"];
+                                            }
+                                        }
                 }
                 
+                
+              
                 $saida = array(
                              "qtde"=> count($itens),
                              "total"=>$qtde_total,
@@ -568,23 +577,58 @@ class RecursoController extends BaseController{
                       $oConn = new \library\persist\PDOConnection(); 
                       $dao = new \Fluxa\Persistence\RecursoDAO();
               	$listaCategorias = \library\persist\connAccess::fetchData($oConn, "select * from recurso_categoria order by nome ");
-		$listaStatus = array() ;
-                
+		        
                 $listaStatusRecurso = EnumRecursoStatus::toArray();
-                while(key($listaStatusRecurso) !== NULL ){
+                /* while(key($listaStatusRecurso) !== NULL ){
                     
-                    $listaStatus[count($listaStatus)]= array("id"=>key($listaStatusRecurso), "nome" => 
-                         EnumRecursoStatus::getValueView(current($listaStatusRecurso)) );
+								$listaStatus[count($listaStatus)]= array("id"=>key($listaStatusRecurso), "nome" => 
+									EnumRecursoStatus::getValueView(current($listaStatusRecurso)) );
+							
+						next($listaStatusRecurso);
+					}
+				*/
 				
-		    next($listaStatusRecurso);
-		}
+				
+				$listaStatus = $this->getListaStatus();
                 
-		$listaTiposFluxo = EnumTiposFluxo::toArray();
-                
-                 return $this->sendResponse($response, array("list_categorias" =>  $listaCategorias, "list_status" => $listaStatus ,
-                     "list_fluxo" => $listaTiposFluxo) );
-          }
+		        $listaTiposFluxo = EnumTiposFluxo::toArray();
+                        
+                          $lista_ods = \library\persist\connAccess::fetchData($oConn, "select id, codigo, descricao from cadastro_basico where id_tipo_cadastro_basico = 1 order by id asc ");
+                         return $this->sendResponse($response, array("list_categorias" =>  $listaCategorias, "list_status" => $listaStatus , "lista_ods" => $lista_ods,
+                                              "list_fluxo" => $listaTiposFluxo) );
+		  }
+		  
+		  public function getListaStatus(){
+
+			$listaStatus = [
+					  
+				["id"=>"pendente", "nome"=>"A realizar"],
+				["id"=>"realizado", "nome" =>"Fluxo Realizado"],
+				["id"=>"potencial", "nome" => "Potencial"],
+			];
+
+			return $listaStatus;
+
+		  }
           
+          public function api_show_fluxos(\Slim\Http\Request  $request, \Slim\Http\Response  $response, $args)
+          {
+
+                      $oConn = new \library\persist\PDOConnection(); 
+                      $dao = new \Fluxa\Persistence\RecursoDAO();
+                      $daoArquivo = new \Fluxa\Persistence\ArquivoDAO();
+                      
+                      
+                      $sql = " select f.* from fluxo f 
+                                  left join recurso r on r.id = r.id_recurso
+                                  left join usuario u on u.id = f.id_usuario_oferece
+                                  left join usuario u2 on u2.id = f.id_usuario_necessita
+                           where f.id_recurso = " . $this->request_slim($request, "id"). " order by f.id desc ";
+                      
+                      $ls = @\library\persist\connAccess::fetchData($oConn, $sql);
+                      
+                      return $this->sendResponse($response,array("data"=>$ls, "qtde" => count($ls)));
+          }
        
           public function api_show(\Slim\Http\Request  $request, \Slim\Http\Response  $response, $args)
           {
@@ -593,6 +637,7 @@ class RecursoController extends BaseController{
                       $dao = new \Fluxa\Persistence\RecursoDAO();
                       $daoArquivo = new \Fluxa\Persistence\ArquivoDAO();
                       
+			$usuarioBusiness = new UsuarioBusiness();
                       
 		      $id = $request->getAttribute('id');
                       
@@ -601,14 +646,45 @@ class RecursoController extends BaseController{
 
                       $ls_arquivos = $daoArquivo->getList($oConn, $id, "recurso", " and type like '%image%' order by id asc ");
                       
+                     // print_r( $reg );
+                            $descricao_ods = "";
+                      if ( ! is_null($reg) && !is_null(@$reg["dados"])){
+                            $ids_objetivo = @$reg["dados"]["objetivo_ods"];
+
+                            if ( $ids_objetivo != "" ){
+
+                                       $sql = "select concat(codigo,' - ' , descricao ) as descr from cadastro_basico where id in ( " . $ids_objetivo . " ) ";
+                                       $ls = @\library\persist\connAccess::fetchData($oConn, $sql);
+                                       $descricao_ods = \library\UtilService::arrayToString($ls, "descr","; ");
+
+                            }
+                      }
+                      
+                      
+                      
+		       $usuario = $usuarioBusiness->buscaUsuarioPorId($reg["id_usuario"] );
+                       
+                       $qtde_fluxos = @\library\persist\connAccess::executeScalar($oConn, "select count(*) from fluxo where id_recurso = ". $id);
+                       if ( $qtde_fluxos == ""){
+                           $qtde_fluxos = 0;
+                       }
+                       @$reg["qtde_fluxos"] = $qtde_fluxos;
+                       
+                       $user = 	array("data"=> strtotime(@$usuario->getDataCadastro()), "nome" => @$usuario->getNome(), "avatar" => @$usuario->getUrlImagem() ); 
+                       
+                      
                        $process = constant("BASE_THUMB_PROCESS");
                       if ( count($ls_arquivos) > 0 ){
                           $reg["image_url"] = $daoArquivo->getURL( (object)$ls_arquivos[0], $ls_arquivos[0]["arquivo"], $process, false);
                       }
                   //    return array( "code" =>  1,  "data"=> $reg, "item"=> $reg);
                       
+                      @$reg["user"] = "";
+                      $reg["user"] = $user;
                       
-                 return $this->sendResponse($response, array("item" =>  $reg, "data" => $reg, "qtde_arquivos" => count($ls_arquivos)) );
+                      
+                 return $this->sendResponse($response, array("item" =>  $reg, "data" => $reg,
+                     "descricao_ods"=>$descricao_ods, "qtde_arquivos" => count($ls_arquivos), "user" => $user )  );
           }
         
        
@@ -646,6 +722,17 @@ class RecursoController extends BaseController{
                       $dao->saveApi($oConn, $request, $reg, $reg_dados);
                       
                       $item = $dao->getByIdApi($oConn, $reg["id"]);
+                      
+                      $hd_json = $request->getParsedBodyParam( "hd_json" )  ; 
+		      $json_delete = $request->getParsedBodyParam( "ids_delete_json" ); //  $request->input( "ids_delete_json");
+                      $recurso_id = $request->getParsedBodyParam('recurso_id');
+                      $tipo = $request->getParsedBodyParam('tipo_rec_cadastro');
+                      
+                      if ( $tipo == ""){
+                          $tipo = "contato";
+                      }
+				
+		      $ret = \Fluxa\Persistence\RecursoCadastroDAO::salvarDadosJson($oConn, $recurso_id, $tipo, $hd_json, $json_delete);
                       
                       return $this->sendResponse($response, array("code" =>  1, "item" => $item) );
               

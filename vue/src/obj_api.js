@@ -86,6 +86,7 @@ var obj_api = {
 
                                             $("#div_error_api").html( "não consegui gerar json <br>" + retorno );
                                             console.log( "exceção?",  exp );
+                                            
                                         }
                                    }
 

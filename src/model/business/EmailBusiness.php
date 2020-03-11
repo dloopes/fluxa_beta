@@ -54,7 +54,11 @@ class EmailBusiness {
 
 		$templateEmail = new TemplateEmail($titulo, $mensagem, $srcBanner, $labelButton, $linkButton);	
 
-		return $this->enviarEmail($templateEmail->getHTML(), $usuarioRecebeuFluxo->getEmail());
+		if ( ! is_null($usuarioRecebeuFluxo)){
+
+		         return $this->enviarEmail($templateEmail->getHTML(), $usuarioRecebeuFluxo->getEmail());
+		}
+
 
 	}
 
@@ -104,10 +108,19 @@ class EmailBusiness {
 		$mail->Subject = "Fluxa"; // Aqui colocar o assunto do email
 		$mail->Body = $msgHtml;
 
-		if (!$mail->Send()) {
-			return false;
+        $SEND_EMAIL = true;
+		if ( defined("SEND_EMAIL") ){
+                 $SEND_EMAIL =  SEND_EMAIL;
 		}
 
+		if ( $SEND_EMAIL ){ //ambiente de testes não precisamos enviar email.
+				if (!$mail->Send()) {
+					return false;
+				}
+
+		}
+
+	
 		return true;
 
 	}

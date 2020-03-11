@@ -221,7 +221,11 @@ class Fluxo {
 
 		if($this->recurso->getTipo() == Recurso::TIPO_POSSIBILIDADE){
 			$mensagem = "<a href='".URI_SISTEMA."usuario/".$this->usuarioOferece->getId()."' data-toggle='tooltip' title='".$this->usuarioOferece->getEmail()."'>".ucfirst($quemOferece)."</a> ofereceu <b>".$this->getRecurso()->getNome()."</b> necessitado por <a href='".URI_SISTEMA."usuario/".$this->usuarioNecessita->getId()."' data-toggle='tooltip' title='".$this->usuarioNecessita->getEmail()."'>".ucfirst($quemNecessita)."</a>";
-		}		
+		}	
+
+		if ( $mensagem == ""){
+					$mensagem = "<a href='".URI_SISTEMA."usuario/".$this->usuarioOferece->getId()."' data-toggle='tooltip' title='".$this->usuarioOferece->getEmail()."'>".ucfirst($quemOferece)."</a> ofereceu <b>".$this->getRecurso()->getNome()."</b> necessitado por <a href='".URI_SISTEMA."usuario/".$this->usuarioNecessita->getId()."' data-toggle='tooltip' title='".$this->usuarioNecessita->getEmail()."'>".ucfirst($quemNecessita)."</a>";
+		}	
 
 		return $mensagem;
 
@@ -261,7 +265,12 @@ class Fluxo {
 
 		if($this->recurso->getTipo() == Recurso::TIPO_POSSIBILIDADE){
 			$mensagem = ucfirst($quemOferece)." ofereceu <b>".$this->getRecurso()->getNome()."</b> necessitado por ".ucfirst($quemNecessita);
-		}		
+		}	
+
+		if ( $mensagem ==""){
+
+			$mensagem = ucfirst($quemOferece)." ofereceu <b>".$this->getRecurso()->getNome()."</b> necessitado por ".ucfirst($quemNecessita);
+		}	
 
 		return $mensagem;
 
@@ -279,6 +288,9 @@ class Fluxo {
 			return $this->getUsuarioOferece();
 		}	
 
+
+			return $this->getUsuarioNecessita();
+
 	}
 
 	public function getUsuarioRecebeuFluxo(){
@@ -292,6 +304,9 @@ class Fluxo {
 		}else if($this->recurso->getTipo() == Recurso::TIPO_POSSIBILIDADE){
 			return $this->getUsuarioNecessita();			
 		}	
+
+
+			return $this->getUsuarioOferece();
 
 	}
 

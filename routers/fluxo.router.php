@@ -17,6 +17,12 @@ $app->get('/fluxo/{id_fluxo}', function (Request $request, Response $response, a
 	$controller = new FluxoController($this->view);
 	return $controller->getFluxo($request, $response, $args);
 });
+$app->get('/fluxo_clean/{id_fluxo}', function (Request $request, Response $response, array $args) {
+    
+        $args["clean"] = 1;
+	$controller = new FluxoController($this->view);
+	return $controller->getFluxo($request, $response, $args);
+});
 
 $app->get('/fluxos[/]', function (Request $request, Response $response, array $args) {
 	$controller = new FluxoController($this->view);

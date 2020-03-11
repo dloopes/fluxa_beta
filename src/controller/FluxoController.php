@@ -11,8 +11,9 @@ use Fluxa\Entity\Fluxo;
 use Fluxa\Entity\FluxoMensagem;
 use Fluxa\Exception\BusinessException;
 use Fluxa\Exception\ControlerException;	
+use Fluxa\Controller\BaseController;
 
-class FluxoController {
+class FluxoController extends BaseController{
 
 	private $view;
 	private $recursoBusiness;
@@ -30,11 +31,22 @@ class FluxoController {
 		$this->emailBusiness = new EmailBusiness();
 	}
 
+	function endsWith($string, $endString) 
+	{ 
+	    $len = strlen($endString); 
+	    if ($len == 0) { 
+	        return true; 
+	    } 
+	    return (substr($string, -$len) === $endString); 
+	} 
+
 	public function postFluxo($request, $response, $args) {
 
 		$dadosRequest = $request->getParsedBody();
 
-		$idRecurso = $dadosRequest['id_recurso'];
+		$idRecurso = @$dadosRequest['id_recurso'];
+		$retorno = @$dadosRequest['retorno'];
+
 
 		if (empty($idRecurso)) {
 			throw new ControlerException("Id do recurso é obrigatório");
@@ -47,6 +59,16 @@ class FluxoController {
 		}
 
 		$fluxo = new Fluxo();
+
+		$id_user_atual =  @$_SESSION['id'];
+
+		if ( $id_user_atual == ""){
+			$id_user_atual =  $dadosRequest['my_user_id'];
+		}
+
+		if (empty($id_user_atual)) {
+			throw new ControlerException("Dados de usuário logado vazio.");
+		}
 		
 		$fluxo->setViewUsuarioOferece(0);
 		$fluxo->setIdRecurso($idRecurso);
@@ -54,11 +76,17 @@ class FluxoController {
 
 		if($recurso->getTipo() == Recurso::TIPO_POTENCIALIDADE){
 			$fluxo->setIdUsuarioOferece($recurso->getIdUsuario());
-			$fluxo->setIdUsuarioNecessita($_SESSION['id']);
+			$fluxo->setIdUsuarioNecessita($id_user_atual);
 		}else{
-			$fluxo->setIdUsuarioOferece($_SESSION['id']);
+			$fluxo->setIdUsuarioOferece($id_user_atual);
 			$fluxo->setIdUsuarioNecessita($recurso->getIdUsuario());
 		}		
+
+		if($recurso->getTipo() == Recurso::TIPO_INICIATIVA){
+
+	        $fluxo->setIdUsuarioOferece($recurso->getIdUsuario());
+			$fluxo->setIdUsuarioNecessita($id_user_atual);
+		}
 
 		$fluxo = $this->fluxoBusiness->salvar($fluxo);
 
@@ -68,6 +96,27 @@ class FluxoController {
 		//Gerando notificacao
 		$this->notificacaoBusiness->geraNotificacaoNovoFluxo($fluxo);
 
+
+		if ( $retorno == "json"){
+
+			$str_url = URI_SISTEMA;
+
+			if ( $this->endsWith($str_url, "/")){
+				$str_url .= 'fluxo/'.$fluxo->getId();
+			}else{
+				$str_url .= '/fluxo/'.$fluxo->getId();
+			}
+
+				        $saida = array(
+		                             "id_recurso"=> $fluxo->getId(),
+		                             "url" => $str_url,
+		                            // "sql" => $sql
+		                        );
+		                         
+		                return $this->sendResponse($response, $saida); 
+
+		}
+	
 		$_SESSION['msg_sucesso'] = "Fluxo gerado com sucesso";
 
 		//return $response->withStatus(302)->withHeader('Location', URI_SISTEMA . 'mapa/recursos/'.$idRecurso);
@@ -159,8 +208,14 @@ class FluxoController {
 		if($fluxo->getIdUsuarioNecessita() == $_SESSION['id'] || $fluxo->getIdUsuarioOferece() == $_SESSION['id']){
 			$podeEnviarMsg = true;
 		}
+                
+                $url_template = "TemplatePainel.php";
+                
+                if ( @$args["clean"] || $request->getQueryParam('clean') == 1 ){
+                    $url_template = "TemplateClean.php";
+                }
 
-		return $this->view->render($response, "TemplatePainel.php", [
+		return $this->view->render($response, $url_template, [
 			"pagina" => "CadastroFluxo.php",
 			"fluxo" => $fluxo,
 			"listaMensagens" => $listaMensagens,
@@ -202,6 +257,7 @@ class FluxoController {
 
 		$idFluxo = $dadosRequest['id_fluxo'];
 		$texto = $dadosRequest['texto'];
+		$clean = @$dadosRequest['clean'];
 
 		if (empty($texto)) {
 			throw new ControlerException("A mensagem é obrigatória");
@@ -232,8 +288,26 @@ class FluxoController {
 
 		$_SESSION['msg_sucesso'] = "Mensagem salva com sucesso";
 
-		return $response->withStatus(302)->withHeader('Location', URI_SISTEMA . '/fluxo/'.$fluxo->getId());
+		return $response->withStatus(302)->withHeader('Location', URI_SISTEMA . '/fluxo/'.$fluxo->getId()."?clean=".$clean);
 
 	}
+        
+        function api_lista( $request, $response, $args ){
+            
+                      $oConn = new \library\persist\PDOConnection();
+                      $dao = new  \Fluxa\Persistence\FluxoDAO();
+                      
+	             $id_recurso_pai = $request->getQueryParam('id_recurso');
+                     
+                    $lista = $dao->getListFilho($oConn, $id_recurso_pai) ;
+                    
+                    $saida = array(
+                             "qtde"=> count($lista),
+                             "data" => $lista ,
+                            // "sql" => $sql
+                        );
+                         
+                return $this->sendResponse($response, $saida);
+        }
 
 }

@@ -32,5 +32,6 @@ define("QDE_BTN_PAG", 6);
 define("K_PATH_FILES", "F:\\OpenServers\\apache_php5\\www\\diogo_loopes\\files");
 define("BASE_URL_ANEXO", "/diogo_loopes/files/");
 define("BASE_THUMB_PROCESS","/diogo_loopes/fluxa_beta/thumb/thumb.php");
+define("SEND_EMAIL", 0); 
 
 /* ------------------------------------------------------------------------------------------- */

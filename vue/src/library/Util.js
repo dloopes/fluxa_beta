@@ -60,6 +60,14 @@ export default {
                 var ar = arp[0].split("-");
                 return ar[1] + " " + ar[2] + " " + ar[0];
         },
+        
+        ApiDateToBR(value) {
+                //mes dia e ano
+                var arp = value.split(" ");
+
+                var ar = arp[0].split("-");
+                return  ar[2]  + "/" + ar[1] + "/" + ar[0] +" " +arp[1] ;
+        },
 
         getHourFromDate(date) {
                 if (date == null)

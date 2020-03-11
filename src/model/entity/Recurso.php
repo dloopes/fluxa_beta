@@ -12,6 +12,7 @@ class Recurso {
 
 	const TIPO_POTENCIALIDADE = "potencialidade";
 	const TIPO_POSSIBILIDADE = "possibilidade";
+	const TIPO_INICIATIVA = "iniciativa";
 
 	protected $table = 'recurso';
 

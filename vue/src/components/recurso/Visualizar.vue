@@ -20,8 +20,10 @@
                          <ul style=" list-style-type: none; ">
                                 <li><label>Status:</label> {{form.status_nome}}  </li>
                                 <li v-if="form.dados != null"><label>Objetivo:</label> {{form.dados.objetivo}} </li>
-                                <li v-if="form.dados != null"><label>Valores:</label> {{form.dados.recursos}} </li>
 
+                                <li v-if="descricao_ods != null && descricao_ods != ''"><label>ODS:</label> <div v-html="exibe_ods(descricao_ods)"></div> </li>
+                                <li v-else><label>ODS:</label> {{form.dados.objetivo_ods}} </li>
+                                
                          </ul>
                          </div>
                           
@@ -29,7 +31,7 @@
                      <div class="col-xs-6" style="margin-left: 0px; padding-left: 0px ">
                              <ul style=" list-style-type: none; ">
                                 <li v-if="form.dados != null"><label>Categoria:</label> {{form.dados.categoria}}  </li>
-                                <li v-if="form.dados != null"><label>ODS:</label> {{form.dados.objetivo_ods}} </li>
+                                <li v-if="form.dados != null"><label>Valores:</label> {{form.dados.recursos}} </li>
 
                          </ul>
                               
@@ -68,11 +70,21 @@ export default {
                     type: Number
         }
     },
+    methods:{
+
+         exibe_ods(str){
+                  return str.split(';').join('<br>');
+         }
+        
+
+    },
     
     data: function() {
     return {
                form: null,
-               qtde_arquivos: 0
+               qtde_arquivos: 0,
+               descricao_ods: "",
+
            }
     },
 
@@ -85,6 +97,7 @@ export default {
                                     
                                         self.form = item;
                                         self.qtde_arquivos = response.qtde_arquivos;
+                                        self.descricao_ods = response.descricao_ods;
                          });
 
 

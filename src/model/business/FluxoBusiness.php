@@ -21,6 +21,15 @@ class FluxoBusiness {
 			throw new BusinessException("Fluxo não pode ser nulos");
 			return null;
 		}
+                
+                $idfluxo = $this->daoFluxo->getId($fluxo->getIdRecurso(), $fluxo->getIdUsuarioOferece(), $fluxo->getIdUsuarioNecessita());
+                
+                if ( $idfluxo ){
+                    //já existe um fluxo com essas coisas.
+                    $fluxo->setId($idfluxo);                    
+                    $status = $this->daoFluxo->getId($fluxo->getIdRecurso(), $fluxo->getIdUsuarioOferece(), $fluxo->getIdUsuarioNecessita(), "status");
+                    $fluxo->setStatus($status);
+                }
 
 		$fluxo = $this->daoFluxo->salvar($fluxo);
 

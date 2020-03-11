@@ -25,8 +25,10 @@ use Fluxa\Entity\Fluxo;
 
 			<div class="box box-widget" style="margin-top: 14px;">
 				<div class="box-header with-border">
-					<div class="user-block">						
-						<img class="img-circle" src="<?=$fluxo->getUsuarioIniciouFluxo()->getUrlImagem()?>" alt="User Image">
+					<div class="user-block">	
+					   <?php if ( ! is_null($fluxo->getUsuarioIniciouFluxo()) ){ ?>					
+						<img class="img-circle" src="<?= $fluxo->getUsuarioIniciouFluxo()->getUrlImagem()?>" alt="User Image">
+					   <?php } ?>
 						<span class="username" style="margin-top: 10px;"><a href="#"><?=$fluxo->getMensagemDoFluxo()?></a>
 							<?php
 							if($fluxo->getStatus() == Fluxo::STATUS_REALIZADO){
@@ -101,7 +103,8 @@ use Fluxa\Entity\Fluxo;
 							<img class="img-responsive img-circle img-sm" src=<?= $_SESSION['image']?>>
 							<!-- .img-push is used to add margin to elements next to floating images -->
 							<div class="img-push">
-								<div class="input-group">										
+								<div class="input-group">								
+									<input type="hidden" name="clean" value=<?= @$_GET["clean"] ?>>						
 									<input type="hidden" name="id_fluxo" value=<?= $fluxo->getId()?>>
 									<input type="text" name="texto" placeholder="Envie uma Mensagem ..." class="form-control" required>
 									<span class="input-group-btn">

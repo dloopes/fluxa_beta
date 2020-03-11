@@ -65,13 +65,22 @@
           </div> 
 
             <div class="col-xs-8">
-                         <div class="form-group" v-if="post_type=='iniciativa' ">  
+                     
+
+
+                                  <div class="form-group">  
+                             
                               
-                                <label for="f_detalhe" >Objetivo</label>
-                                          
-                                            <input class="form-control" v-model="form.dados.objetivo" name="f_dados_objetivo" 
-                                             id="f_dados_objetivo"  >
-                             </div>     
+                                      <label for="f_status">Status</label>
+                                       <select class="form-control" name="f_status" 
+                                       id="f_status" v-model="form.status">
+                                       <option :value="item.id" v-for="(item, index) in list_status" :key="index">{{item.nome}}</option>
+
+
+                                      </select>
+                             
+                          
+                        </div>    
         </div> 
 
 
@@ -86,29 +95,26 @@
 
 
 
-      <div class="col-xs-4">
-                     <div class="form-group">  
-                             
+      <div class="col-xs-6">
+
+
+            <div class="form-group" v-if="post_type=='iniciativa' ">  
                               
-                                      <label for="f_status">Status</label>
-                                       <select class="form-control" name="f_status" 
-                                       id="f_status" v-model="form.status">
-                                       <option :value="item.id" v-for="(item, index) in list_status" :key="index">{{item.nome}}</option>
-
-
-                                      </select>
-                             
-                          
-                        </div> 
+                                <label for="f_detalhe" >Objetivo</label>
+                                            <textarea class="form-control" v-model="form.dados.objetivo" name="f_dados_objetivo" 
+                     id="f_dados_objetivo"  style="height: 200px"></textarea> 
+                             </div>  
+                
     </div> 
 
-       <div class="col-xs-8">
+       <div class="col-xs-6">
            <div class="form-group" v-if="post_type=='iniciativa' ">  
             
               <label for="f_detalhe" >ODS: Objetivos de Desenvolvimento Sustentável</label>
-                        
-                        <input class="form-control" v-model="form.dados.objetivo_ods" name="f_dados_objetivo_ods" 
-                           id="f_dados_objetivo_ods"   />
+
+                     <checkboxlist v-model="form.dados.objetivo_ods"  :lista="lista_ods"  name="f_dados_objetivo_ods" 
+                           id="f_dados_objetivo_ods"  /> 
+
            </div> 
 
       </div> 
@@ -137,6 +143,17 @@
                                   
                     </div> 
          </div> 
+
+       <div class="col-xs-12" v-if="form.id != null && parseInt(form.id) > 0 && show_contato">
+                 <div class="form-group">  
+
+                        <recurso_cadastros_list_cadtable
+                            :id_recurso="form.id" titulo="de Forma de Contato" tipo="contato"
+                            titulo_coluna_inicio="Link Rede Social ou Contato" :recurso_id="form.id" :onSaveData="saveDataCadastros"
+                            ></recurso_cadastros_list_cadtable>
+          </div> 
+         </div> 
+
  <div class="form-group" v-if="false">  
 								  <label for="f_tipo_recurso">tipo_recurso</label>
 								   <input class="form-control" name="f_tipo_recurso" 
@@ -194,7 +211,6 @@ Vue.component('recurso_list', RecursoList );
 
   </section>
 
-
 <section class="col-xs-12" style="margin-top: 10px" v-if="form.id != null && parseInt(form.id) > 0 ">
 <div class="box"><div class="box-header with-border">Potencialidades e Possibilidades</div> 
 <div class="box-body">
@@ -226,7 +242,14 @@ Vue.component('recurso_list', RecursoList );
 
 <script>
 
+import checkboxlist from '../geral/checkboxlist.vue';
+import recurso_cadastros_list_cadtable from '../recurso_cadastros/RecursoCadastrosListCadTable.vue'
+
     export default {
+      components: {
+        checkboxlist,
+        recurso_cadastros_list_cadtable
+      },
       props: {
 
         id_load:{
@@ -278,10 +301,18 @@ Vue.component('recurso_list', RecursoList );
                                 categoria: "",
                       }
 
+
               },
+
+              show_contato: true,
 
               list_categorias: [],
               list_status: [],
+              lista_ods: [],
+
+              
+              hd_json:"[]",
+              ids_delete_json:"[]",
             	
 				             
         				
@@ -312,6 +343,7 @@ Vue.component('recurso_list', RecursoList );
                          obj_api.call("recursos_new", "GET", {} , function(response){
                               self.list_categorias = response.list_categorias;
                               self.list_status = response.list_status;
+                              self.lista_ods = response.lista_ods;
                          });
 
                           if ( this.id_load == null || this.id_load.toString() == ""){
@@ -398,7 +430,12 @@ Vue.component('recurso_list', RecursoList );
                  	console.log("clique no voltar!");
                  	 this.onBack( self );
                  }
-        	},
+          },
+          
+          saveDataCadastros( hd_json,  ids_delete_json ){
+                         this.hd_json = hd_json;
+                         this.ids_delete_json = ids_delete_json;
+          },
 
         	salvar (tipo ){
 
@@ -415,6 +452,7 @@ Vue.component('recurso_list', RecursoList );
                 }
 
                 self.disableButton = true;
+                self.show_contato = false;
 
                   var data = {               
                               id: this.form.id,  
@@ -431,6 +469,12 @@ Vue.component('recurso_list', RecursoList );
                               recursos: this.form.dados.recursos
                               }
 
+                if (this.form.id != null &&  this.form.id.toString() != ""){
+                  data["hd_json"] = this.hd_json;
+                  data["ids_delete_json"] = this.ids_delete_json;
+                  data["recurso_id"] = this.form.id;
+                }
+
                // var data = this.form;
 
 
@@ -442,9 +486,10 @@ Vue.component('recurso_list', RecursoList );
                       //self.carregaForm(item);
 
                       self.show_message = "on";
-                      self.message_text = " Cadastro salvo com sucesso!";
+                      self.message_text = " Iniciativa salva com sucesso!";
                       self.interval_message = setTimeout(self.clear_message, 6000);
                       self.disableButton = false;
+                      self.show_contato = true;
 
                      if ( self.onSave != null && self.onSave != undefined ){
                             self.onSave(retorno, 'save');

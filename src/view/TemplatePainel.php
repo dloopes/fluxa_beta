@@ -30,6 +30,7 @@ use Fluxa\Business\UsuarioBusiness;
 
 
      <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>dist/css/painel.css">
+     <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>dist/css/modal.css">
      <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>lib/jquery-ui/themes/base/autocomplete.css">
 
      <link rel="stylesheet" href="<?php echo URI_SISTEMA ?>lib/gallery/pagination.css">
@@ -87,11 +88,15 @@ use Fluxa\Business\UsuarioBusiness;
 
 <script src="<?php echo URI_SISTEMA ?>dist/js/bootbox.min.js"></script>
 <script src="<?php echo URI_SISTEMA ?>dist/js/sweetalert/sweetalert2.all.min.js"></script>
+<script src="<?php echo URI_SISTEMA ?>dist/js/jquery.modal.colorbox-min.js"></script>
 
 <script src="<?php echo URI_SISTEMA ?>lib/gallery/pagination.js?g=999"></script>
 <script type="text/javascript">
 window.K_AUTHORIZATION = "<?php echo UsuarioBusiness::getAuthorizationApi() ?>";    
 window.URL_API = "<?= URL_API ?>";    
+window.K_USER_ID = "<?php echo UsuarioBusiness::getSessionIDUsuario() ?>";
+window.K_URL_SISTEMA = "<?php echo BASE_SISTEMA ?>";
+
 </script>
 <style>
 #div_drag{

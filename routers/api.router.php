@@ -3,6 +3,7 @@ use Fluxa\Controller\RecursoController as RecursoController;
 use Fluxa\Controller\ArquivoController as ArquivoController;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
+use Fluxa\Controller\FluxoController as FluxoController;
 
 // Recursos -------------------
 $app->get('/api/recursos_new', function (Request $request, Response $response, array $args) {
@@ -85,5 +86,33 @@ $app->delete('/api/midia/{id}', function (Request $request, Response $response, 
 });
 
 //-------------------------------
+
+
+//Fluxo -----------------------
+$app->post('/api/fluxo[/]', function (Request $request, Response $response, array $args) {
+	$controller = new FluxoController($this->view);
+	return $controller->postFluxo($request, $response, $args);
+});
+$app->get('/api/fluxo_list', function (Request $request, Response $response, array $args) {
+	$controller = new FluxoController($this->view);
+	return $controller->api_lista($request, $response, $args);
+});
+
+
+
+//Fluxo ----------------------
+
+//Recurso Cadastros 
+$app->post('/api/recurso_cadastros[/]', function (Request $request, Response $response, array $args) {
+	$controller = new \Fluxa\Controller\RecursoCadastroController($this->view);
+	return $controller->salvargrid($request, $response, $args);
+});
+
+$app->get('/api/recurso_cadastros[/]', function (Request $request, Response $response, array $args) {
+      $controller = new \Fluxa\Controller\RecursoCadastroController($this->view);
+      return $controller->listgrid($request, $response, $args);
+});
+
+
 
 ?>

@@ -26,6 +26,10 @@ class UsuarioBusiness {
             return $GLOBALS["id_usuario_api"];
         }
 
+        public static function getSessionIDUsuario(){
+        	return $_SESSION["id"];
+        }
+
         public static function getToken($id){ //Token para ser usado na api do usuário.
             return md5(KEY_PASS."|".$id);
         }
