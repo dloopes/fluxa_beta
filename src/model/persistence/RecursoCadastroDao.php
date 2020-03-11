@@ -16,7 +16,7 @@ class RecursoCadastroDAO {
                             $itens = json_decode($hd_json);
                             $ids_delete = json_decode($ids_delete_json);
 
-                            $qtde_salvo = 0; $qtde_delete = 0;
+                            $qtde_salvo = 0; $qtde_delete = 0; $qtde_teste = 0;
 
                             for ( $i = 0; $i < count($itens); $i++){
 
