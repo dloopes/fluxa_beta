@@ -421,9 +421,12 @@ class RecursoController extends BaseController{
                       $oConn = new \library\persist\PDOConnection(); 
                       $dao = new \Fluxa\Persistence\RecursoDAO();
             
-	       $id_recurso_pai = $request->getQueryParam('id_recurso_pai');
-	       $tipo = $request->getQueryParam('tipo');
-               $lista = $dao->getListFilho($oConn, $id_recurso_pai, $tipo);
+						$id_recurso_pai = $request->getQueryParam('id_recurso_pai');
+						$tipo = $request->getQueryParam('tipo');
+						$com_fluxo = $request->getQueryParam('com_fluxo');
+						//die("com fluxo? ". $com_fluxo  );
+					   //$oConn, $id_recurso_pai, $tipo = "", $id_recurso_necessita = "" , $com_fluxo = false 
+					    $lista = $dao->getListFilho($oConn, $id_recurso_pai, $tipo, "", $com_fluxo);
                
                 $saida = array(
                              "qtde"=> count($lista),
@@ -443,10 +446,11 @@ class RecursoController extends BaseController{
                             $id_recurso_pai = $request->getParsedBodyParam('id_recurso_pai');
                             $id_recurso_filho = $request->getParsedBodyParam('id_recurso_filho'); 
                             $tipo = $request->getParsedBodyParam('tipo'); 
+                            $com_fluxo = $request->getParsedBodyParam('com_fluxo'); 
                             
                             $id_tmp =  $dao->adicionarFilho($oConn, $id_recurso_pai, $id_recurso_filho, $tipo);
                             
-                            $lista = $dao->getListFilho($oConn, $id_recurso_pai, $tipo);
+                            $lista = $dao->getListFilho($oConn, $id_recurso_pai, $tipo , "", $com_fluxo);
                
                             $saida = array(
                                          "qtde"=> count($lista),
@@ -528,7 +532,7 @@ class RecursoController extends BaseController{
                }
                
                
-                $sql = "select p.*, ca.nome as nome_dimensao, da.categoria, da.objetivo, '' as blnk "
+                $sql = "select p.*, ca.nome as nome_dimensao, da.categoria, da.objetivo, da.recursos, '' as descricao_cat, '' as blnk "
                         . " from recurso p left join recurso_dados da on da.id = p.id "
                         . " left join recurso_categoria ca on ca.id = p.id_categoria "
                         . "  where 1 = 1 ". $filtro . " order by ".$order. " ".$order_type . $limitacao;
@@ -547,6 +551,19 @@ class RecursoController extends BaseController{
 
                                         $nome_staus = \library\UtilService::getDescByCOD($listaStatus, "id", "nome",  $item["status"]);
                                         $item["status"] = $nome_staus;
+                                        
+                                        $descricao_cat = "";
+                                         $ar = array_filter( explode(",", $item["categoria"]) );
+                                            $ids_cat = join(",", $ar);
+
+                                            if ( $ids_cat != ""){
+
+                                            $sql = "select concat(codigo,' - ' , descricao ) as descr from cadastro_basico where id in ( " . $ids_cat . " ) ";
+                                            $ls = @\library\persist\connAccess::fetchData($oConn, $sql);
+                                            $descricao_cat = \library\UtilService::arrayToString($ls, "descr",", ");
+                                            }
+                                            
+                                        $item["descricao_cat"] = $descricao_cat;
                                                 //EnumRecursoStatus::getValueView($item["status"]);
 
                                         if ( $paginacao ){
@@ -556,6 +573,8 @@ class RecursoController extends BaseController{
                                                                        $process, true ); // $lst_arquivo[0]["arquivo"];
                                             }
                                         }
+                                        
+                                        //$reg_dados["categoria"]
                 }
                 
                 
@@ -593,9 +612,14 @@ class RecursoController extends BaseController{
                 
 		        $listaTiposFluxo = EnumTiposFluxo::toArray();
                         
-                          $lista_ods = \library\persist\connAccess::fetchData($oConn, "select id, codigo, descricao from cadastro_basico where id_tipo_cadastro_basico = 1 order by id asc ");
+                        $lista_ods = \library\persist\connAccess::fetchData($oConn, "select id, codigo, descricao from cadastro_basico"
+                                  . "  where id_tipo_cadastro_basico = 1 order by id asc ");
+                          
+                        $lista_cat = \library\persist\connAccess::fetchData($oConn, "select id, codigo, descricao from cadastro_basico"
+                                  . "  where id_tipo_cadastro_basico = 2 order by id asc ");
+                        
                          return $this->sendResponse($response, array("list_categorias" =>  $listaCategorias, "list_status" => $listaStatus , "lista_ods" => $lista_ods,
-                                              "list_fluxo" => $listaTiposFluxo) );
+                                              "list_fluxo" => $listaTiposFluxo, "lista_cat" => $lista_cat) );
 		  }
 		  
 		  public function getListaStatus(){
@@ -603,8 +627,8 @@ class RecursoController extends BaseController{
 			$listaStatus = [
 					  
 				["id"=>"pendente", "nome"=>"A realizar"],
-				["id"=>"realizado", "nome" =>"Fluxo Realizado"],
-				["id"=>"potencial", "nome" => "Potencial"],
+				["id"=>"realizado", "nome" =>"Realizado"],
+				["id"=>"andamento", "nome" => "Em andamento"],
 			];
 
 			return $listaStatus;
@@ -647,7 +671,7 @@ class RecursoController extends BaseController{
                       $ls_arquivos = $daoArquivo->getList($oConn, $id, "recurso", " and type like '%image%' order by id asc ");
                       
                      // print_r( $reg );
-                            $descricao_ods = "";
+                            $descricao_ods = ""; $descricao_cat = "";
                       if ( ! is_null($reg) && !is_null(@$reg["dados"])){
                             $ids_objetivo = @$reg["dados"]["objetivo_ods"];
 
@@ -656,6 +680,24 @@ class RecursoController extends BaseController{
                                        $sql = "select concat(codigo,' - ' , descricao ) as descr from cadastro_basico where id in ( " . $ids_objetivo . " ) ";
                                        $ls = @\library\persist\connAccess::fetchData($oConn, $sql);
                                        $descricao_ods = \library\UtilService::arrayToString($ls, "descr","; ");
+
+                            }
+                            
+                             $ids_cat = @$reg["dados"]["categoria"];
+                                if ( $ids_cat != "" ){
+                                       $ar = array_filter( explode(",", $ids_cat) );
+                                       $ids_cat = join(",", $ar);
+                                       
+                                       if ( $ids_cat != ""){
+
+                                       $sql = "select concat(codigo,' - ' , descricao ) as descr from cadastro_basico where id in ( " . $ids_cat . " ) ";
+                                       $ls = @\library\persist\connAccess::fetchData($oConn, $sql);
+                                       
+                                       $descricao_cat = \library\UtilService::arrayToString($ls, "descr","; ");
+                                       
+                                                 //print_r( $ls );
+                                           //  die(" ids cat? " . $sql );
+                                       }
 
                             }
                       }
@@ -684,7 +726,7 @@ class RecursoController extends BaseController{
                       
                       
                  return $this->sendResponse($response, array("item" =>  $reg, "data" => $reg,
-                     "descricao_ods"=>$descricao_ods, "qtde_arquivos" => count($ls_arquivos), "user" => $user )  );
+                     "descricao_ods"=>$descricao_ods, "qtde_arquivos" => count($ls_arquivos), "user" => $user, "descricao_cat" => $descricao_cat )  );
           }
         
        

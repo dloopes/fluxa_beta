@@ -50,10 +50,11 @@ class RecursoCadastroDAO {
            }
            
            for ( $i = 0; $i < count($ids_delete); $i++){
-               $item_req = $ids_delete[$i];
+               //$item_req = $ids_delete[$i];
+               $id_delete = $ids_delete[$i];
                
                  if ( $item_req->id != ""){
-                             $sql = " delete from recurso_cadastros where id_recurso = ". $recurso_id. " and tipo = '". $tipo."' and id = ". $item_req->id;
+                             $sql = " delete from recurso_cadastros where id_recurso = ". $recurso_id. " and tipo = '". $tipo."' and id = ". $id_delete;
                              \library\persist\connAccess::executeCommand($oConn, $sql);
                              $qtde_delete++;
                  }

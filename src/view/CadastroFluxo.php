@@ -123,10 +123,12 @@ use Fluxa\Entity\Fluxo;
 
 		<?php
 		if(
-			$fluxo->getStatus() === Fluxo::STATUS_POTENCIAL && $fluxo->getUsuarioRecebeuFluxo()->getId() == $_SESSION['id']
+			( $fluxo->getStatus() === "" || $fluxo->getStatus() === Fluxo::STATUS_POTENCIAL) 
+                           && $fluxo->getUsuarioRecebeuFluxo()->getId() == $_SESSION['id']
 		){
 			?>
-			<form method="POST" action="<?php echo BASE_SISTEMA ?>fluxo/status/">
+			<form method="POST" action="<?php echo BASE_SISTEMA ?>fluxo/status/">		
+				<input type="hidden" name="clean" value=<?= @$_GET["clean"] ?>>	
 				<div class="text-left">
 					<input type="hidden" name="id_fluxo" value=<?= $fluxo->getId()?>>
 					<button type="submit" class="btn btn-primary btn-flat" name="opcao" value="1"><i class="fa fa-thumbs-o-up"></i> Fluxado (De Acordo)</button>

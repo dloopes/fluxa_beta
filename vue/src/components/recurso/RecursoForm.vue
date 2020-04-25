@@ -48,23 +48,21 @@
 
 
 
-      <div class="col-xs-4">
-                           <div class="form-group">  
-                                   
-                                    
-                                            <label for="f_id_categoria">Categoria</label>
+      <div class="col-xs-8">
 
-                                 <input class="form-control" name="f_categoria" 
-                                              id="f_categoria" v-model="form.dados.categoria"
-                                         type="text" placeholder="Categoria (separe por vírgula) " > 
-
-                                           
-                                   
-                                
-                              </div> 
+             <div class="form-group" v-if="post_type=='iniciativa' ">  
+                              
+                                <label for="f_detalhe" >Objetivo</label>
+                                   <input class="form-control" name="f_nome" 
+                                                      id="f_detalhe" v-model="form.dados.objetivo"
+                                                    type="text" placeholder="Objetivo da iniciativa" >
+                                            <textarea class="form-control" v-model="form.dados.objetivo" name="f_dados_objetivo" 
+                     id="f_dados_objetivo"  style="height: 200px" v-if="false"></textarea> 
+                             </div>  
+                          
           </div> 
 
-            <div class="col-xs-8">
+            <div class="col-xs-4">
                      
 
 
@@ -97,13 +95,22 @@
 
       <div class="col-xs-6">
 
+                                   <div class="form-group">  
+                                   
+                                    
+                                            <label for="f_id_categoria">Categoria</label>
 
-            <div class="form-group" v-if="post_type=='iniciativa' ">  
-                              
-                                <label for="f_detalhe" >Objetivo</label>
-                                            <textarea class="form-control" v-model="form.dados.objetivo" name="f_dados_objetivo" 
-                     id="f_dados_objetivo"  style="height: 200px"></textarea> 
-                             </div>  
+                                 <input class="form-control" v-if="false" name="f_categoria" 
+                                              id="f_categoria" v-model="form.dados.categoria"
+                                         type="text" placeholder="Categoria (separe por vírgula) " > 
+
+                                           
+                     <checkboxlist v-model="form.dados.categoria"  :lista="lista_cat"  name="f_categoria" 
+                           id="f_categoria"  /> 
+                                   
+                                
+                              </div> 
+       
                 
     </div> 
 
@@ -309,6 +316,7 @@ import recurso_cadastros_list_cadtable from '../recurso_cadastros/RecursoCadastr
               list_categorias: [],
               list_status: [],
               lista_ods: [],
+              lista_cat: [],
 
               
               hd_json:"[]",
@@ -344,6 +352,7 @@ import recurso_cadastros_list_cadtable from '../recurso_cadastros/RecursoCadastr
                               self.list_categorias = response.list_categorias;
                               self.list_status = response.list_status;
                               self.lista_ods = response.lista_ods;
+                              self.lista_cat = response.lista_cat;
                          });
 
                           if ( this.id_load == null || this.id_load.toString() == ""){

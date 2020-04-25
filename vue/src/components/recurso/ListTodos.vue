@@ -30,7 +30,7 @@
 
                                  <div class="caption">
                                       <p ><b v-html="item.nome"></b> </p>
-                                      <p ><b>Categoria: </b> <span v-html="item.categoria"></span></p>
+                                      <p ><b>Categoria: </b> <span v-html="item.descricao_cat"></span></p>
                                       <p ><b>Status: </b> <span v-html="item.status"></span></p>
                                     
                                       

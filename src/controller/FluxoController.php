@@ -46,6 +46,9 @@ class FluxoController extends BaseController{
 
 		$idRecurso = @$dadosRequest['id_recurso'];
 		$retorno = @$dadosRequest['retorno'];
+		$id_recurso_necessita = @$dadosRequest['id_recurso_necessita'];
+                
+            
 
 
 		if (empty($idRecurso)) {
@@ -74,21 +77,36 @@ class FluxoController extends BaseController{
 		$fluxo->setIdRecurso($idRecurso);
 		$fluxo->setStatus(Fluxo::STATUS_POTENCIAL);
 
-		if($recurso->getTipo() == Recurso::TIPO_POTENCIALIDADE){
+		$fluxo->id_recurso_necessita = $id_recurso_necessita;
+                
+                if ( $id_recurso_necessita == ""){
+                    
+		       $fluxo->id_recurso_necessita = null;
+                }
+                
+                $fluxo->setIdUsuarioOferece($recurso->getIdUsuario());
+		$fluxo->setIdUsuarioNecessita($id_user_atual);
+                
+         
+		 if($recurso->getTipo() == Recurso::TIPO_POTENCIALIDADE){
 			$fluxo->setIdUsuarioOferece($recurso->getIdUsuario());
 			$fluxo->setIdUsuarioNecessita($id_user_atual);
-		}else{
-			$fluxo->setIdUsuarioOferece($id_user_atual);
-			$fluxo->setIdUsuarioNecessita($recurso->getIdUsuario());
-		}		
+		}else if ($recurso->getTipo() == Recurso::TIPO_POSSIBILIDADE) {
+		       	$fluxo->setIdUsuarioOferece($id_user_atual);
+		 	$fluxo->setIdUsuarioNecessita($recurso->getIdUsuario());
+		}
+                 
+                		
 
-		if($recurso->getTipo() == Recurso::TIPO_INICIATIVA){
+		if($recurso->getTipo() == Recurso::TIPO_INICIATIVA || $id_recurso_necessita  != ""){
 
-	        $fluxo->setIdUsuarioOferece($recurso->getIdUsuario());
+	                $fluxo->setIdUsuarioOferece($recurso->getIdUsuario());
 			$fluxo->setIdUsuarioNecessita($id_user_atual);
 		}
 
 		$fluxo = $this->fluxoBusiness->salvar($fluxo);
+                
+                $this->limpaBrancoStatusDoFluxo($fluxo->getId());
 
 		//Enviar Email
 		$this->emailBusiness->enviarEmailNovoFluxo($fluxo);
@@ -96,6 +114,12 @@ class FluxoController extends BaseController{
 		//Gerando notificacao
 		$this->notificacaoBusiness->geraNotificacaoNovoFluxo($fluxo);
 
+		if ( $fluxo->getStatus() == "" ){
+			
+            
+                           $oConn = new \library\persist\PDOConnection();
+                           \library\persist\connAccess::executeCommand($oConn, "update fluxo set status='".Fluxo::STATUS_POTENCIAL. "' where id = ". $fluxo->getId() );
+		}
 
 		if ( $retorno == "json"){
 
@@ -107,9 +131,13 @@ class FluxoController extends BaseController{
 				$str_url .= '/fluxo/'.$fluxo->getId();
 			}
 
+
+
 				        $saida = array(
 		                             "id_recurso"=> $fluxo->getId(),
+		                             "id_fluxo"=> $fluxo->getId(),
 		                             "url" => $str_url,
+                                             "status"=>$fluxo->getStatus() != "" ? $fluxo->getStatus() : Fluxo::STATUS_POTENCIAL
 		                            // "sql" => $sql
 		                        );
 		                         
@@ -123,6 +151,20 @@ class FluxoController extends BaseController{
 		return $response->withStatus(302)->withHeader('Location', URI_SISTEMA . '/fluxo/'.$fluxo->getId());
 
 	}
+        
+        
+        public function limpaBrancoStatusDoFluxo($idFluxo){
+            
+            $oConn = new \library\persist\PDOConnection();
+            if ( $idFluxo != ""){
+                $idtmp = \library\persist\connAccess::executeScalar($oConn, "select id as res from fluxo where id = ". $idFluxo. " and ifNull(status,'') = '' ");
+        
+                if ( $idtmp != ""){
+                    \library\persist\connAccess::executeCommand($oConn, "update fluxo set status='".Fluxo::STATUS_POTENCIAL. "' where id = ". $idtmp );
+                }
+            }
+            
+        }
 
 	public function postFluxoStatus($request, $response, $args) {
 
@@ -130,6 +172,11 @@ class FluxoController extends BaseController{
 
 		$idFluxo = $dadosRequest['id_fluxo'];
 		$opcaoSelecionada = $dadosRequest['opcao'];
+		$clean = $dadosRequest['clean'];
+                
+                $this->limpaBrancoStatusDoFluxo($idFluxo);
+                $oConn = new \library\persist\PDOConnection();
+                
 
 		if (empty($idFluxo)) {
 			throw new ControlerException("Id do fluxo é obrigatório");
@@ -157,9 +204,11 @@ class FluxoController extends BaseController{
 			$fluxo = $this->fluxoBusiness->salvar($fluxo);
 
 			
+                       // die(" estou aqui ? ". $fluxo->getStatus(). " -- aa -- ". $opcaoSelecionada);
 
 			//Notificando outra parte de que o fluxo foi aceito
 			$this->notificacaoBusiness->geraNotificacaoFluxoAceito($fluxo);
+                         \library\persist\connAccess::executeCommand($oConn, "update fluxo set status='".Fluxo::STATUS_REALIZADO. "' where id = ". $idFluxo );
 
 			$_SESSION['msg_sucesso'] = "Fluxado com sucesso";
 
@@ -167,7 +216,8 @@ class FluxoController extends BaseController{
 
 			// Não Fluxar
 			$fluxo->setStatus(Fluxo::STATUS_INTERROMPIDO);
-			$fluxo = $this->fluxoBusiness->salvar($fluxo);			
+			$fluxo = $this->fluxoBusiness->salvar($fluxo);	
+                        \library\persist\connAccess::executeCommand($oConn, "update fluxo set status='".Fluxo::STATUS_INTERROMPIDO. "' where id = ". $idFluxo );		
 
 			//Notificando outra parte de que o fluxo foi aceito
 			$this->notificacaoBusiness->geraNotificacaoFluxoRecusado($fluxo);
@@ -175,9 +225,16 @@ class FluxoController extends BaseController{
 			$_SESSION['msg_sucesso'] = "Fluxo foi interrompido";
 
 		}	
+                
+                $strcomp = "";
+                
+                if ( $clean != ""){
+                    $strcomp = "?clean=".$clean;
+                }
+                
 
 		//return $response->withStatus(302)->withHeader('Location', URI_SISTEMA . 'mapa/recursos/'.$idRecurso);
-		return $response->withStatus(302)->withHeader('Location', URI_SISTEMA . '/fluxo/'.$fluxo->getId());
+		return $response->withStatus(302)->withHeader('Location', URI_SISTEMA . '/fluxo/'.$fluxo->getId(). $strcomp);
 
 	}	
 
@@ -185,6 +242,7 @@ class FluxoController extends BaseController{
 
 		$idFluxo = $request->getAttribute('id_fluxo');
 		
+                $this->limpaBrancoStatusDoFluxo($idFluxo);
 		$fluxo = $this->fluxoBusiness->buscarPorId($idFluxo);
 
 		$recurso = $this->recursoBusiness->buscarPorId($fluxo->getIdRecurso(), false);

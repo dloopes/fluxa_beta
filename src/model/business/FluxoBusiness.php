@@ -22,12 +22,14 @@ class FluxoBusiness {
 			return null;
 		}
                 
-                $idfluxo = $this->daoFluxo->getId($fluxo->getIdRecurso(), $fluxo->getIdUsuarioOferece(), $fluxo->getIdUsuarioNecessita());
+                $idfluxo = $this->daoFluxo->getId($fluxo->getIdRecurso(), $fluxo->getIdUsuarioOferece(), $fluxo->getIdUsuarioNecessita(), "id",
+                          $fluxo->id_recurso_necessita);
                 
                 if ( $idfluxo ){
                     //já existe um fluxo com essas coisas.
                     $fluxo->setId($idfluxo);                    
-                    $status = $this->daoFluxo->getId($fluxo->getIdRecurso(), $fluxo->getIdUsuarioOferece(), $fluxo->getIdUsuarioNecessita(), "status");
+                    $status = $this->daoFluxo->getId($fluxo->getIdRecurso(), $fluxo->getIdUsuarioOferece(), $fluxo->getIdUsuarioNecessita(), "status",
+                             $fluxo->id_recurso_necessita);
                     $fluxo->setStatus($status);
                 }
 

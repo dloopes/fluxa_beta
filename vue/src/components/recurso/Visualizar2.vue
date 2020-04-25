@@ -43,9 +43,10 @@
                                         <li><label>Status:</label> {{form.status_nome}}  </li>
                                         <li v-if="form.dados != null"><label>Objetivo:</label> {{form.dados.objetivo}} </li>
 
-                                          <li v-if="form.dados != null"><label>Categoria:</label> {{form.dados.categoria}}  </li>
                                         <li v-if="form.dados != null"><label>Valores:</label> {{form.dados.recursos}} </li>
 
+                                          <li v-if="descricao_cat != null && descricao_cat != ''"><label>Categoria:</label> <div v-html="exibe_ods(descricao_cat)"></div> </li>
+                                        <li v-else><label>Categoria:</label> {{form.dados.categoria}} </li>
 
                                         <li v-if="descricao_ods != null && descricao_ods != ''"><label>ODS:</label> <div v-html="exibe_ods(descricao_ods)"></div> </li>
                                         <li v-else><label>ODS:</label> {{form.dados.objetivo_ods}} </li>
@@ -180,6 +181,7 @@ export default {
                qtde_arquivos: 0,
                descricao_ods: "",
                id_user_my: null,
+               descricao_cat: ""
 
            }
     },
@@ -195,6 +197,7 @@ export default {
                                         self.form = item;
                                         self.qtde_arquivos = response.qtde_arquivos;
                                         self.descricao_ods = response.descricao_ods;
+                                        self.descricao_cat = response.descricao_cat;
                          });
 
 

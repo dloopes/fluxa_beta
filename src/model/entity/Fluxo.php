@@ -31,6 +31,8 @@ class Fluxo {
 	private $usuarioOferece;
 
 	private $usuarioNecessita;
+        
+    public $id_recurso_necessita = null;
 
 
 	public function getId() {
@@ -214,14 +216,18 @@ class Fluxo {
 		}
 
 		$mensagem = "";
-
+		$mensagem = "<a href='".URI_SISTEMA."usuario/".$this->usuarioOferece->getId()."' data-toggle='tooltip' title='".$this->usuarioOferece->getEmail()."'>".ucfirst($quemOferece)."</a> ofereceu <b>".$this->getRecurso()->getNome()."</b> necessitado por <a href='".URI_SISTEMA."usuario/".$this->usuarioNecessita->getId()."' data-toggle='tooltip' title='".$this->usuarioNecessita->getEmail()."'>".ucfirst($quemNecessita)."</a>";
+	
 		if($this->recurso->getTipo() == Recurso::TIPO_POTENCIALIDADE){
-			$mensagem = "<a href='".URI_SISTEMA."usuario/".$this->usuarioNecessita->getId()."' data-toggle='tooltip' title='".$this->usuarioNecessita->getEmail()."'>".ucfirst($quemNecessita)."</a> solicitou <b>".$this->getRecurso()->getNome()."</b> ofertado por <a href='".URI_SISTEMA."usuario/".$this->usuarioOferece->getId()."' data-toggle='tooltip' title='".$this->usuarioOferece->getEmail()."'>".ucfirst($quemOferece)."</a>";
+                       //$mensagem = "<a href='".URI_SISTEMA."usuario/".$this->usuarioNecessita->getId()."' data-toggle='tooltip' title='".$this->usuarioNecessita->getEmail()."'>".ucfirst($quemNecessita)."</a> solicitou <b>".$this->getRecurso()->getNome()."</b> ofertado por <a href='".URI_SISTEMA."usuario/".$this->usuarioOferece->getId()."' data-toggle='tooltip' title='".$this->usuarioOferece->getEmail()."'>".ucfirst($quemOferece)."</a>";
+	
 		}
 
 		if($this->recurso->getTipo() == Recurso::TIPO_POSSIBILIDADE){
-			$mensagem = "<a href='".URI_SISTEMA."usuario/".$this->usuarioOferece->getId()."' data-toggle='tooltip' title='".$this->usuarioOferece->getEmail()."'>".ucfirst($quemOferece)."</a> ofereceu <b>".$this->getRecurso()->getNome()."</b> necessitado por <a href='".URI_SISTEMA."usuario/".$this->usuarioNecessita->getId()."' data-toggle='tooltip' title='".$this->usuarioNecessita->getEmail()."'>".ucfirst($quemNecessita)."</a>";
-		}	
+		//	$mensagem = "<a href='".URI_SISTEMA."usuario/".$this->usuarioOferece->getId()."' data-toggle='tooltip' title='".$this->usuarioOferece->getEmail()."'>".ucfirst($quemOferece)."</a> ofereceu <b>".$this->getRecurso()->getNome()."</b> necessitado por <a href='".URI_SISTEMA."usuario/".$this->usuarioNecessita->getId()."' data-toggle='tooltip' title='".$this->usuarioNecessita->getEmail()."'>".ucfirst($quemNecessita)."</a>";
+	
+                    
+                }	
 
 		if ( $mensagem == ""){
 					$mensagem = "<a href='".URI_SISTEMA."usuario/".$this->usuarioOferece->getId()."' data-toggle='tooltip' title='".$this->usuarioOferece->getEmail()."'>".ucfirst($quemOferece)."</a> ofereceu <b>".$this->getRecurso()->getNome()."</b> necessitado por <a href='".URI_SISTEMA."usuario/".$this->usuarioNecessita->getId()."' data-toggle='tooltip' title='".$this->usuarioNecessita->getEmail()."'>".ucfirst($quemNecessita)."</a>";

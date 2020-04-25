@@ -48,8 +48,8 @@
             <tr> 
                       <th>Título {{titulo_cadastro}} </th>  
                       <th>Objetivo</th>  
-                      <th>Categoria</th>  
                       <th>Dimensão</th>  
+                      <th>Recursos</th>  
                    
                       <th>Status</th>  
                 <th></th>
@@ -232,8 +232,8 @@
                               "columns": [
                                             { "data": "nome" },  
                                             { "data": "objetivo" },
-                                            { "data": "categoria" }, 
                                             { "data": "nome_dimensao" }, 
+                                            { "data": "recursos" }, 
                                               
                                             { "data": "status" },   
                                               { "data": "blnk" }

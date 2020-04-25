@@ -21,8 +21,9 @@ class LoginBusiness {
 
 		$permissions = array("email");
 
-		$urlLogin = URI_SISTEMA . "login/facebook";
+		$urlLogin = URI_SISTEMA . "login/facebook?sco=1";
 		$loginUrl = $helper->getLoginUrl($urlLogin, $permissions);
+                
 
 		return $loginUrl;
 
@@ -38,8 +39,8 @@ class LoginBusiness {
 	public function getFacebookObj() {
 
 		$fb = new Facebook([
-			'app_id' => '2018457761813920',
-			'app_secret' => 'f3d9078b26055c4055fb5916dbd6c834',
+			'app_id' => K_FACEBOOK_APP_ID,
+			'app_secret' => K_FACEBOK_APP_SECRET ,
 			'default_graph_version' => 'v2.12',
 		]);
 

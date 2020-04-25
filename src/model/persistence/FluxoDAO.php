@@ -14,8 +14,8 @@ class FluxoDAO {
 
 		if (empty($fluxo->getId())) {
 
-			$strSQL = "INSERT INTO fluxo(id_usuario_oferece, id_usuario_necessita, id_recurso, status) ";
-			$strSQL .= "VALUES (:id_usuario_oferece, :id_usuario_necessita, :id_recurso, :status)";
+			$strSQL = "INSERT INTO fluxo(id_usuario_oferece, id_usuario_necessita, id_recurso, status, id_recurso_necessita) ";
+			$strSQL .= "VALUES (:id_usuario_oferece, :id_usuario_necessita, :id_recurso, :status,  :id_recurso_necessita)";
 
 			$preSQL = ConexaoPDO::getInstance()->prepare($strSQL);
                         
@@ -25,6 +25,7 @@ class FluxoDAO {
 			$preSQL->bindValue(":id_usuario_necessita", $fluxo->getIdUsuarioNecessita());
 			$preSQL->bindValue(":id_recurso", $fluxo->getIdRecurso());
 			$preSQL->bindValue(":status", $fluxo->getStatus());
+                        $preSQL->bindValue(":id_recurso_necessita", $fluxo->id_recurso_necessita);
 
 			$preSQL->execute();
 
@@ -49,18 +50,27 @@ class FluxoDAO {
 
 	}
 
-	public function getId ($id_recurso, $id_usuario_oferece, $id_usuario_necessita, $coluna = "id"){
+	public function getId ($id_recurso, $id_usuario_oferece, $id_usuario_necessita, $coluna = "id", $id_recurso_necessita = ""){
 
 
             $oConn = new \library\persist\PDOConnection(); 
-            $sql = "select ".$coluna." from fluxo where id_recurso = " . $id_recurso. " and id_usuario_necessita = ". $id_usuario_necessita.
-            " and id_usuario_oferece = " . $id_usuario_oferece . " order by id desc "; // " $preSQL->fetchAll(PDO::FETCH_CLASS, "
             
+            $compl = "";
+            
+            if ( $id_recurso_necessita != ""){
+                $compl .= " and id_recurso_necessita = ". $id_recurso_necessita;
+            } else {
+                 $compl .= " and id_recurso_necessita is null ";
+            }
+            
+            $sql = "select ".$coluna." from fluxo where id_recurso = " . $id_recurso. " and id_usuario_necessita = ". $id_usuario_necessita.
+            " and id_usuario_oferece = " . $id_usuario_oferece . $compl. " order by id desc "; // " $preSQL->fetchAll(PDO::FETCH_CLASS, "
+            //die($sql );
                       
             $ar = \library\persist\connAccess::fetchData($oConn, $sql);
           
             
-           // print_r( $ar  );die(" ". $sql . $ar[0]["id"]);
+           // print_r( $ar  );die(" ". $sql . @$ar[0]["id"]);
             
             if ( count($ar) > 0 ){
                 return $ar[0][$coluna];

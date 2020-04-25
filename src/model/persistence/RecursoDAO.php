@@ -324,6 +324,15 @@ class RecursoDAO {
 		{
 				return date("Y-m-d H:i:s");	
 		}
+                
+                public function garanteIDS($lista_ids){
+                                                    $artmp = explode(",", $lista_ids);                                
+
+                                                    $artmp = array_filter($artmp);   
+                                                    $str_tmp = join(",", $artmp);
+                                                    
+                                                    return $str_tmp;
+                }
         public function saveApi($oConn, $request, &$reg, &$reg_dados){
 
                             $reg["nome"] = $request->getParsedBodyParam('nome');  
@@ -342,10 +351,13 @@ class RecursoDAO {
                             
                             
                             $reg_dados["objetivo"] = $request->getParsedBodyParam('objetivo');  
-                            $reg_dados["objetivo_ods"] = $request->getParsedBodyParam('objetivo_ods');  
+                            $reg_dados["objetivo_ods"] = $this->garanteIDS(  $request->getParsedBodyParam('objetivo_ods') );  
                             $reg_dados["dimensao"] = $request->getParsedBodyParam('dimensao');  
                             $reg_dados["recursos"] = $request->getParsedBodyParam('recursos');  
-                            $reg_dados["categoria"] = $request->getParsedBodyParam('categoria');  
+                            $reg_dados["categoria"] = $this->garanteIDS(  $request->getParsedBodyParam('categoria') );  
+                            
+                               $ar = array_filter( explode(",", $reg_dados["categoria"]) );
+                               $reg_dados["categoria"] = join(",", $ar);
                             
                             \library\persist\connAccess::nullBlankColumns($reg);
                             \library\persist\connAccess::nullBlankColumns($reg_dados);
@@ -371,11 +383,14 @@ class RecursoDAO {
                             }
 	}
 
-	public function adicionarFilho($oConn, $id_recurso_pai, $id_recurso_filho, $tipo ){
+	public function adicionarFilho($oConn, $id_recurso_pai, $id_recurso_filho, $tipo){
 		$reg = array();
                 
+                $compl = "";
+          
+                
                 $id_tmp = \library\persist\connAccess::executeScalar($oConn, "select id from recurso_associacao where id_recurso_pai = ".
-                          $id_recurso_pai. " and id_recurso_filho = ". $id_recurso_filho);
+                          $id_recurso_pai. " and id_recurso_filho = ". $id_recurso_filho. $compl);
                 
                 if ( $id_tmp != ""){
                     return $id_tmp;
@@ -399,13 +414,28 @@ class RecursoDAO {
 
 	}
         
-        public function getListFilho($oConn, $id_recurso_pai, $tipo = "" ){
+        public function getListFilho($oConn, $id_recurso_pai, $tipo = "", $id_recurso_necessita = "" , $com_fluxo = false ){
+			//recurso associação. O pai é o cadastro e o filho é o que foi associado nele. No caso iniciativa é o pai e o filho é o algum outro recurso pedido.
+			//porém, no fluxo o id_recurso_necessita é aquele que esta pedindo, e o id_recurso é o recurso de quem cadastrou..
+            $colunas = "";
+               if ( $com_fluxo ){
+                    $colunas = "fl.id as id_fluxo, ifNull(fl.status, 'Potencial') as status_fluxo, "; 
+               }
             
-            $sql = "select r.id, re.nome as nome_recurso_pai, refilho.nome as nome_recurso_filho, upper( concat(refilho.tipo_recurso, ' - ', refilho.tipo_fluxo)) as tipo_filho "
+            $sql = "select r.id, ".$colunas." r.id_recurso_pai, r.id_recurso_filho, re.nome as nome_recurso_pai, refilho.nome as nome_recurso_filho, upper( concat(refilho.tipo_recurso, ' - ', refilho.tipo_fluxo)) as tipo_filho "
                     . "  from recurso_associacao r "
                     . "  left join recurso re on re.id = r.id_recurso_pai "
-                    . "  left join recurso refilho on refilho.id = r.id_recurso_filho where 1 = 1 ";
+                    . "  left join recurso refilho on refilho.id = r.id_recurso_filho ";
             
+            if ( $com_fluxo ){
+                $sql .= " left join fluxo fl on ( fl.id_recurso_necessita = r.id_recurso_pai and fl.id_recurso = r.id_recurso_filho ) ";
+            }
+            
+             $sql .= "  where 1 = 1 ";
+		   
+			 if ( $id_recurso_necessita != ""){
+                $sql .= " and r.id_recurso_pai = ". $id_recurso_necessita;
+            }
             if ( $id_recurso_pai != ""){
                 $sql .= " and r.id_recurso_pai = ". $id_recurso_pai;
             }
@@ -413,7 +443,8 @@ class RecursoDAO {
                 $sql .= " and r.tipo = '". $tipo."' ";
             }
             
-            $sql .= " order by refilho.nome ";
+            
+            $sql .= " order by refilho.nome ";  //die(  $sql );
             
             $lista = \library\persist\connAccess::fetchData($oConn, $sql);
             

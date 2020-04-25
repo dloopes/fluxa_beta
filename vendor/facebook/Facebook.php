@@ -134,6 +134,8 @@ class Facebook
             'pseudo_random_string_generator' => null,
             'url_detection_handler' => null,
         ], $config);
+        
+        print_r( $config ); die(" ");
 
         if (!$config['app_id']) {
             throw new FacebookSDKException('Required "app_id" key not supplied in config and could not find fallback environment variable "' . static::APP_ID_ENV_NAME . '"');

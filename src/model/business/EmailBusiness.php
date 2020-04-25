@@ -108,9 +108,9 @@ class EmailBusiness {
 		$mail->Subject = "Fluxa"; // Aqui colocar o assunto do email
 		$mail->Body = $msgHtml;
 
-        $SEND_EMAIL = true;
+                $SEND_EMAIL = true;
 		if ( defined("SEND_EMAIL") ){
-                 $SEND_EMAIL =  SEND_EMAIL;
+                        $SEND_EMAIL =  SEND_EMAIL;
 		}
 
 		if ( $SEND_EMAIL ){ //ambiente de testes não precisamos enviar email.

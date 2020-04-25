@@ -28,7 +28,8 @@
              	<tr>
                      
                            <th>Associação</th>  
-                            <th>Tipo</th>  
+                            <th>Tipo</th> 
+                     <th style="width: 30px"> </th> 
                      <th style="width: 30px">
                        <button class="btn btn-default" v-if="false" v-on:click="add" type="button"
                        ><i class="fa fa-plus"></i></button>
@@ -43,7 +44,21 @@
               <td>  
                      {{item.tipo_filho}}
 			 </td> 
- 
+   <td>
+                       <button v-if="item.id_fluxo == null || item.id_fluxo.toString() == ''" class="btn btn-success" type="button" 
+                          v-on:click="fluxar(item, index)">
+                          Fluxar
+                       </button>
+                       <span v-else>
+                         <button v-if="item.id_fluxo != null" v-bind:class="'btn btn-small ' + getStyleFluxo( item)"  type="button" 
+                          v-on:click="ver_fluxo(item, index)">
+                           <i class="fa fa-eye"></i> Fluxo {{item.status_fluxo}}
+                       </button>
+                             
+                       </span>
+
+
+                     </td>
                     
                      <td>
                        <button class="btn btn-default" type="button" 
@@ -56,11 +71,11 @@
              </tbody>
              <tfoot >
               <tr v-if="items.length <= 0">
-                <td colspan="3">
+                <td colspan="4">
                   <i>Sem associações</i></td>
               </tr>
                <tr v-if="false">
-                <td colspan="11">
+                <td colspan="4">
                  
                      <button class="btn btn-primary pull-right"
                              type="button"
@@ -108,12 +123,58 @@ import Util from '../../library/Util';
 
               button_new_text: "" ,//<i class=\"fa fa-file\" ></i> NOVA POST",
               placeholder_recursos: "carregando..",
+               id_user_my: null,
             }
         },
         methods: {
 
+          getStyleFluxo(item){
+            if ( item.status_fluxo ==  "Potencial"){
+              return "btn-warning";
+            }
+             if ( item.status_fluxo ==  "Realizado"){
+              return "btn-info";
+            }
+               if ( item.status_fluxo ==  "Interrompido"){
+              return "btn-danger";
+            }
+
+              return "btn-warning";
+
+          },
+
           loadRecurso(val){
 
+
+          },
+          ver_fluxo(item, index){
+
+                         var url = window.K_URL_SISTEMA + "/fluxo/" + item.id_fluxo+"?clean=1";
+
+                         $.colorbox({innerWidth: 800, height: 450, iframe:true, href: url });
+
+          },
+          fluxar(item, index){
+
+                 
+                 var data = {
+                         "retorno": "json",
+                         "id_recurso": item.id_recurso_filho,
+                         "id_recurso_necessita": item.id_recurso_pai,
+                         "my_user_id": this.id_user_my
+                 }
+                 
+                         obj_api.call("fluxo", "POST", data , function(response){
+                              var retorno = response;
+
+                              item.id_fluxo = retorno.id_fluxo;
+                              item.status_fluxo = retorno.status;
+                           
+                              //Alerta.show("Sucesso!", "Fluxo solicitado com sucesso!","success", null );
+                              obj_alert.show("Sucesso!", "Fluxo solicitado com sucesso!","success", null );
+                              //Vou encaminhar este usuário para a tela de fluxo..
+                              //document.location.href= retorno.url;
+                         });
 
           },
 
@@ -220,7 +281,7 @@ import Util from '../../library/Util';
 
                       var data = {id_recurso_pai: this.id_recurso_pai,
                                   id_recurso_filho: this.id_recurso_filho,
-                                  tipo: "cadastro" }
+                                  tipo: "cadastro", "com_fluxo": 1 }
 
                       obj_api.call("recurso_associacao_grid", "post", data, function(retorno){
                                    
@@ -272,6 +333,8 @@ import Util from '../../library/Util';
                                         tipo: "",  
                                         status: "",  
                                         date_insert: "",  
+                                        id_fluxo: null,
+                                        status_fluxo: ""
                       };
 
                        // if ( this.equipamento_id != null ){
@@ -291,6 +354,7 @@ import Util from '../../library/Util';
         mounted() {
 
                 let self = this;
+                 this.id_user_my = window.K_USER_ID;
 
                console.log("chamando autocomplete?");
                 this.call_autocomplete();
@@ -302,7 +366,7 @@ import Util from '../../library/Util';
                 var method = "GET";
                 this.disableButton = true;
 
-                var data = { id_recurso_pai: this.id_recurso_pai , tipo: "cadastro"}
+                var data = { id_recurso_pai: this.id_recurso_pai , tipo: "cadastro", com_fluxo: "1" }
                 
                 var fn_return = function (retorno){
 

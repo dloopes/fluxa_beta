@@ -1,0 +1,4 @@
+﻿#são separados por tabulação - NOme Servidor Ativo Banco Usuario Senha Porta
+
+Local	rafaeldatabase	Sim	dloopes_fluxa	root		3305
+Producao	213.190.6.206	Sim	fluxa_u238694432	fluxa_fluxa	3*x!Z48+mX?F	3306

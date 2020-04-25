@@ -34,4 +34,13 @@ define("BASE_URL_ANEXO", "/diogo_loopes/files/");
 define("BASE_THUMB_PROCESS","/diogo_loopes/fluxa_beta/thumb/thumb.php");
 define("SEND_EMAIL", 0); 
 
+putenv("FACEBOOK_APP_ID=199243014758463");
+putenv("FACEBOOK_APP_SECRET=f715ef9477eeff07179417de250714f4");
+define("K_FACEBOOK_APP_ID", "199243014758463");
+define("K_FACEBOK_APP_SECRET", "f715ef9477eeff07179417de250714f4");
+/*
+ * App Secret: f715ef9477eeff07179417de250714f4
+API ID: 199243014758463
+ */
+
 /* ------------------------------------------------------------------------------------------- */
