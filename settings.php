@@ -38,6 +38,10 @@ putenv("FACEBOOK_APP_ID=199243014758463");
 putenv("FACEBOOK_APP_SECRET=f715ef9477eeff07179417de250714f4");
 define("K_FACEBOOK_APP_ID", "199243014758463");
 define("K_FACEBOK_APP_SECRET", "f715ef9477eeff07179417de250714f4");
+
+define("K_PDO_CONN", "mysql:host=rafaeldatabase;port=3305;dbname=dloopes_fluxa");
+define("K_PDO_CONN_USER", "root");
+define("K_PDO_CONN_PASS", "");
 /*
  * App Secret: f715ef9477eeff07179417de250714f4
 API ID: 199243014758463
