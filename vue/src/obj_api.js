@@ -47,6 +47,73 @@ var obj_api = {
           return window.URL_API +  tipo;
 
       },
+      call2: function(tipo, method, data , fn_return ){
+
+
+        var url =  window.URL_API2 +  tipo; 
+
+        var dataSend = this.getFormData(data);
+
+        if ( (method == "get" || method =="GET") && data != null ){
+            var comp = this.serialize(data);
+            if ( comp != ""){
+                url += "?"+ comp;
+
+            }
+
+            dataSend = null;
+        }
+
+        console.log( url );
+
+
+         $.ajax({
+                      type: method,
+                      url: url,
+                      contentType: false, //"application/x-www-form-urlencoded",
+                      processData: false,
+                      data: dataSend,
+                      headers: {
+                            'Authorization':window.K_AUTHORIZATION,
+                            //'Content-Type':'application/json'
+                      },
+                      success: function (retorno) {
+                         
+                           if (fn_return != null ){
+
+                                try{
+
+                                    fn_return( retorno, tipo);
+
+                                }catch(exp){
+                                    console.log("não consegui fazer json");
+
+                                    $("#div_error_api").html( "não consegui gerar json <br>" + retorno );
+                                    console.log( "exceção?",  exp );
+                                    
+                                }
+                           }
+
+                         
+                      },
+                      error: function (xhr, status, p3, p4) {
+                          var err = "Error " + " " + status + " " + p3 + " " + p4;
+                          if (xhr.responseText && xhr.responseText[0] == "{")
+                              err = JSON.parse(xhr.responseText).Message;
+
+
+                          console.error(err);
+
+                      }
+                  }).fail(function (response) {
+                        console.log("Falha ao tentar obter dados");
+                        console.log(response);   
+
+                        $("#div_error_api").html( response.responseText );
+                  });
+
+
+},
       call: function(tipo, method, data , fn_return ){
 
 

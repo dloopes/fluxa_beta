@@ -202,6 +202,8 @@ export default {
   },
   mounted() {
     this.internal_value = this.value;
+
+    this.verifica_se_tem();
     //this.setAutocompleteJquery();
     //  $("#" + this.name).select2();
   },

@@ -119,8 +119,12 @@
                      console.log("Vue recebeu o javascript:" + datarow.id );
                    //  console.log( datarow );
           },
-          onSave(){
+          onSave(ret, tipo){
                   this.refresh_table();
+
+                  if ( tipo == "save"){
+                      obj_alert.show("Sucesso!","Iniciativa salva com sucesso!","success", null, 2000);
+                  }
           },
 
           refresh_table(){

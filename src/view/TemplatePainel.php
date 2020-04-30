@@ -96,6 +96,10 @@ window.K_AUTHORIZATION = "<?php echo UsuarioBusiness::getAuthorizationApi() ?>";
 window.URL_API = "<?= URL_API ?>";    
 window.K_USER_ID = "<?php echo UsuarioBusiness::getSessionIDUsuario() ?>";
 window.K_URL_SISTEMA = "<?php echo BASE_SISTEMA ?>";
+window.K_API2_AUTH = "<?php echo UsuarioBusiness::getAuthorizationKey(UsuarioBusiness::getSessionIDUsuario()) ?>";  
+window.URL_API2 = "<?= URL_API2 ?>";    
+
+
 
 </script>
 <style>

@@ -4,13 +4,14 @@
 define("URI_SISTEMA", "http://" . $_SERVER['SERVER_NAME'] . ":8080/diogo_loopes/fluxa_beta/");
 define("BASE_SISTEMA", "/diogo_loopes/fluxa_beta/");
 define("URL_API", "/diogo_loopes/fluxa_beta/api/");
+define("URL_API2", "/diogo_loopes/fluxa_api2/api/");
 
 /* 
 define("URI_SISTEMA", "http://" . $_SERVER['SERVER_NAME'] . ":8087/");
 define("BASE_SISTEMA", "/");
 define("URL_API", "/api/");
 */
-define("KEY_PASS", "flux@.b3ta"); //key pass pra ajudar na autenticação da api.
+define("KEY_PASS", "flUx\$A.$%"); // "flux@.b3ta" key pass pra ajudar na autenticação da api.
 
 $g_ambiente = "dev"; //prod
 

@@ -216,7 +216,8 @@ class Fluxo {
 		}
 
 		$mensagem = "";
-		$mensagem = "<a href='".URI_SISTEMA."usuario/".$this->usuarioOferece->getId()."' data-toggle='tooltip' title='".$this->usuarioOferece->getEmail()."'>".ucfirst($quemOferece)."</a> ofereceu <b>".$this->getRecurso()->getNome()."</b> necessitado por <a href='".URI_SISTEMA."usuario/".$this->usuarioNecessita->getId()."' data-toggle='tooltip' title='".$this->usuarioNecessita->getEmail()."'>".ucfirst($quemNecessita)."</a>";
+		$mensagem = "<a href='".URI_SISTEMA."usuario/".$this->usuarioOferece->getId()."' "
+                        . "data-toggle='tooltip' title='".$this->usuarioOferece->getEmail()."'>".ucfirst($quemOferece)."</a> ofereceu <b>".$this->getRecurso()->getNome()."</b> necessitado por <a href='".URI_SISTEMA."usuario/".$this->usuarioNecessita->getId()."' data-toggle='tooltip' title='".$this->usuarioNecessita->getEmail()."'>".ucfirst($quemNecessita)."</a>";
 	
 		if($this->recurso->getTipo() == Recurso::TIPO_POTENCIALIDADE){
                        //$mensagem = "<a href='".URI_SISTEMA."usuario/".$this->usuarioNecessita->getId()."' data-toggle='tooltip' title='".$this->usuarioNecessita->getEmail()."'>".ucfirst($quemNecessita)."</a> solicitou <b>".$this->getRecurso()->getNome()."</b> ofertado por <a href='".URI_SISTEMA."usuario/".$this->usuarioOferece->getId()."' data-toggle='tooltip' title='".$this->usuarioOferece->getEmail()."'>".ucfirst($quemOferece)."</a>";
@@ -288,7 +289,7 @@ class Fluxo {
 			$this->getRecurso();
 		}
 
-		if($this->recurso->getTipo() == Recurso::TIPO_POTENCIALIDADE){
+		if($this->recurso->getTipo() == Recurso::TIPO_POTENCIALIDADE || $this->id_recurso_necessita != ""){
 			return $this->getUsuarioNecessita();
 		}else if($this->recurso->getTipo() == Recurso::TIPO_POSSIBILIDADE){
 			return $this->getUsuarioOferece();
@@ -305,7 +306,7 @@ class Fluxo {
 			$this->getRecurso();
 		}
 
-		if($this->recurso->getTipo() == Recurso::TIPO_POTENCIALIDADE){
+		if($this->recurso->getTipo() == Recurso::TIPO_POTENCIALIDADE || $this->id_recurso_necessita != ""){
 			return $this->getUsuarioOferece();
 		}else if($this->recurso->getTipo() == Recurso::TIPO_POSSIBILIDADE){
 			return $this->getUsuarioNecessita();			

@@ -29,6 +29,9 @@ import RecursosForm from './components/recurso/RecursoForm.vue'
 import RecursosList from './components/recurso/RecursoList.vue'
 import RecursoAssociacao from './components/recurso/recurso_associacao.vue'
 import RecursoTodos from './components/recurso/ListTodos.vue'
+import CadEndereco from './components/endereco/CadEndereco.vue'
+
+
 //import uc_pesquisacodigonome from './components/pesquisa/uc_pesquisacodigonome.vue'
 //import MovimentacaoForm from './components/movimentacao/MovimentacaoForm.vue'
 
@@ -42,6 +45,7 @@ Vue.component('recurso_form', RecursosForm);
 Vue.component('recurso_associacao', RecursoAssociacao);
 Vue.component('vue_select', Select);
 Vue.component('recurso_todos', RecursoTodos);
+Vue.component('cad_endereco', CadEndereco);
 
 
 //Vue.component('uc_pesquisacodigonome', uc_pesquisacodigonome);
