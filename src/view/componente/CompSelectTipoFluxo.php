@@ -27,7 +27,7 @@ class CompSelectTipoFluxo implements IComponente {
 			<div class="<?=$this->classColumn?>">
 				<div class="form-group">
 					<label>Tipo de Fluxo *</label>
-					<select class="form-control" name="tipo_fluxo" required>								
+					<select class="form-control" name="tipo_fluxo" id="tipo_fluxo" required>								
 
 						<?php
 						if(empty($this->tipoSelecionado)){

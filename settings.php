@@ -5,6 +5,7 @@ define("URI_SISTEMA", "http://" . $_SERVER['SERVER_NAME'] . ":8080/diogo_loopes/
 define("BASE_SISTEMA", "/diogo_loopes/fluxa_beta/");
 define("URL_API", "/diogo_loopes/fluxa_beta/api/");
 define("URL_API2", "/diogo_loopes/fluxa_api2/api/");
+define("URL_API2_COMPLETE", "http://" . $_SERVER['SERVER_NAME'] . ":8080/diogo_loopes/fluxa_api2/api/");
 
 /* 
 define("URI_SISTEMA", "http://" . $_SERVER['SERVER_NAME'] . ":8087/");

@@ -342,6 +342,8 @@ class RecursoDAO {
                             $reg["status"] = $request->getParsedBodyParam('status');  
                             $reg["tipo_fluxo"] = $request->getParsedBodyParam('tipo_fluxo'); 
                             $reg["id_endereco"] = $request->getParsedBodyParam('id_endereco'); 
+                            $reg["tipo_endereco"] = $request->getParsedBodyParam('tipo_endereco');
+                            $reg["url_endereco_virtual"] = $request->getParsedBodyParam('url_endereco_virtual');  
                             $reg["id_usuario"] = $GLOBALS["id_usuario_api"];
                             if ( @$reg["created_at"]  == ""){
                                       $reg["created_at"] = $this->getCurrentBDdate();

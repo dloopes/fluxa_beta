@@ -29,7 +29,7 @@ class CompSelectCategoriaRecurso implements IComponente {
 			<div class="<?=$this->classColumn?>">
 				<div class="form-group">
 					<label for="inputNome">Dimensão *</label>
-					<select class="form-control" name="id_categoria" required>
+					<select class="form-control" name="id_categoria" id="id_categoria" required>
 
 						<?php
 						if(empty($this->categoriaSelecionada)){

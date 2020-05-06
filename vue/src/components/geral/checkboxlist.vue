@@ -28,9 +28,15 @@ export default {
     },
     watch: {
                     values(val) {
+                        if ( val == null )
+                            val = [];
+
                          this.$emit("selected", val.join(','));
                     },
                     value(val) {
+                         if ( val == null )
+                            val = "";
+
                           this.values = val.split(',');
                     }
     },

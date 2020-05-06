@@ -48,8 +48,6 @@
             <tr> 
                       <th>Título {{titulo_cadastro}} </th>  
                       <th>Objetivo</th>  
-                      <th>Dimensão</th>  
-                      <th>Recursos</th>  
                    
                       <th>Status</th>  
                 <th></th>
@@ -236,10 +234,8 @@
                               "columns": [
                                             { "data": "nome" },  
                                             { "data": "objetivo" },
-                                            { "data": "nome_dimensao" }, 
-                                            { "data": "recursos" }, 
                                               
-                                            { "data": "status" },   
+                                               { "data": "status" },   
                                               { "data": "blnk" }
                                               ],
                                   "order": [[ 0, "desc" ]]
@@ -266,7 +262,7 @@
                                                                 "<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span>"+
                                                               "</a>");
                                                       },
-                                                      targets: 5
+                                                      targets: 3
                                             } 
                                   ] 
                               } );

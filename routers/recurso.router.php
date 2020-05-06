@@ -10,6 +10,7 @@ $app->get('/potencialidades/all/{pag}', function (Request $request, Response $re
 
 $app->get('/potencialidades', function (Request $request, Response $response, array $args) {
 	$controller = new RecursoController($this->view);
+        
 	return $controller->getPotencialidades($request, $response, $args);
 });
 

@@ -33,6 +33,7 @@ class CompTabelaDados implements IComponente {
     public function __construct($paginaAtual, IControladorTabelaDados $controlador) {
         $this->paginaAtual = $paginaAtual;
         $this->controlador = $controlador;
+        
     }
 
     public function setItens($itens) {

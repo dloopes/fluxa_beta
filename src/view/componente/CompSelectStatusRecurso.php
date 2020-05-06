@@ -27,7 +27,7 @@ class CompSelectStatusRecurso implements IComponente {
 			<div class="<?=$this->classColumn?>">
 				<div class="form-group">
 					<label>Status *</label>
-					<select class="form-control" name="status" required>								
+					<select class="form-control" name="status" id="status" required>								
 
 						<?php
 						if(empty($this->statusSelecionado)){

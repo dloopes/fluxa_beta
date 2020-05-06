@@ -113,13 +113,28 @@ class FluxoController extends BaseController{
 
 		//Gerando notificacao
 		$this->notificacaoBusiness->geraNotificacaoNovoFluxo($fluxo);
-
+                $oConn = new \library\persist\PDOConnection();
 		if ( $fluxo->getStatus() == "" ){
 			
             
-                           $oConn = new \library\persist\PDOConnection();
+                         
                            \library\persist\connAccess::executeCommand($oConn, "update fluxo set status='".Fluxo::STATUS_POTENCIAL. "' where id = ". $fluxo->getId() );
 		}
+                
+                if ( @$dadosRequest['tipo_endereco'] != "" ){
+                    
+                    if ( $dadosRequest['tipo_endereco'] == "V"){
+                                     \library\persist\connAccess::executeCommand($oConn, "update fluxo set id_endereco =  null,"
+                                             . " url_endereco_virtual='". str_replace("'","''", @$dadosRequest['url_endereco_virtual']). "',"
+                                             . " tipo_endereco='".@$dadosRequest['tipo_endereco']."' where id = ". $fluxo->getId() );
+		
+                    } else {
+                        
+                                       \library\persist\connAccess::executeCommand($oConn, "update fluxo "
+                                             . " url_endereco_virtual=' ',"
+                                             . " tipo_endereco='".@$dadosRequest['tipo_endereco']."' where id = ". $fluxo->getId() );
+                    }
+                }
 
 		if ( $retorno == "json"){
 

@@ -1,12 +1,17 @@
 <template>
-  <div>
-    <div>
-      <div class="col-xs-12" v-if="items != null && items.length > 0 ">
-        <div class="form-group">
+  <div v-if="monitora">
+    <div >
+      <div class="col-xs-12">
+        <div class="form-group" v-if="items != null && items.length > 0 ">
           <input type="radio" v-model="selectTipoCadastro" value="A" />
           <label>Selecione um endereço cadastrado anterioremente</label>
 
-          <select v-model="form.id" class="form-control" v-on:change="seleciona" :disabled="selectTipoCadastro!='A'">
+          <select
+            v-model="form.id"
+            class="form-control"
+            v-on:change="seleciona"
+            :disabled="selectTipoCadastro!='A'"
+          >
             <option v-for="(item,index) in items" :value="item.id" :key="index">{{item.descricao}}</option>
           </select>
         </div>
@@ -21,7 +26,7 @@
         <div class="col-xs-12">
           <div class="form-group">
             <label>Este endereço é no Brasil?</label>
-            <select v-model="form.tipo_pais" class="form-control">
+            <select v-model="form.tipo_pais" class="form-control" required>
               <option value="Brasil">Sim</option>
               <option value="Outro">Não - O endereço esta em outro país</option>
             </select>
@@ -38,6 +43,7 @@
                 v-model="form.pais"
                 type="text"
                 placeholder="Digite o nome do país"
+                required
               />
             </div>
           </div>
@@ -51,6 +57,7 @@
                 type="text"
                 maxlength="255"
                 placeholder="endereço"
+                required
               />
             </div>
           </div>
@@ -64,6 +71,7 @@
                 type="text"
                 maxlength="20"
                 placeholder="Nº"
+                required
               />
             </div>
           </div>
@@ -116,6 +124,7 @@
                 type="text"
                 placeholder="Logradouro"
                 maxlength="250"
+                required
               />
             </div>
           </div>
@@ -130,6 +139,7 @@
                 type="text"
                 placeholder="Nº"
                 maxlength="30"
+                required
               />
             </div>
           </div>
@@ -144,6 +154,7 @@
                 type="text"
                 placeholder="Bairro"
                 maxlength="50"
+                required
               />
             </div>
           </div>
@@ -157,6 +168,7 @@
                 type="text"
                 placeholder="CEP"
                 maxlength="8"
+                required
               />
             </div>
           </div>
@@ -211,7 +223,10 @@ export default {
     "onSave",
     "tipo",
     "id_recurso",
-    "form"
+    "form_endereco",
+    "tipo_endereco",
+
+    "onSelected"
   ],
   data: function() {
     return {
@@ -222,6 +237,7 @@ export default {
       items_cidade: [],
       items_estado: [],
       items: [],
+      form_id: null,
 
       tipo_pais: "Brasil",
       selectTipoCadastro: "N",
@@ -234,17 +250,53 @@ export default {
       show_message: "off",
       message_text: "",
       message_type: "success",
-      interval_message: null
+      interval_message: null,
+      form: {},
+      monitora: false,
+      mostra: false,
     };
   },
   model: {
-    prop: "form",
+    prop: "form_endereco",
     event: "selected"
   },
+  watch: {
+    form: {
+      // This will let Vue know to look inside the array
+      deep: true,
+
+      // We have to move our method to a handler field
+      handler() {
+        console.log("alguem mudou algo no endereco? ");
+
+        if (this.monitora) {
+          this.$emit("selected", this.form);
+        }
+      }
+    },
+    form_id: function(val) {
+      if (val != undefined) {
+        var fteste = this.getFormById(val);
+        if (fteste != null) {
+          this.form = fteste;
+        }
+      }
+    }
+  },
+
   mounted() {
     let self = this;
 
+    this.form = { ...this.form_endereco };
+    //Depois desse passo eu começo a monitorar o form...
+    this.monitora = true;
+
     this.loadInitData();
+
+    this.form_id = this.form_endereco.id;
+    console.log("passei pelo moutend ", this.form_endereco );
+
+    this.mostra = true;
 
     if (this.show_back_button != null && this.show_back_button != undefined) {
       this.botao_voltar_visible = this.show_back_button;
@@ -271,34 +323,53 @@ export default {
 
     obj_api.call(url, method, data, fn_return); */
   },
-  watch:{
-
-    selectTipoCadastro: function (val){
-      if ( val == "N"){
-        this.$emit("selected", service.getModel() );
+  watch: {
+    selectTipoCadastro: function(val) {
+      if (val == "N") {
+        this.form = service.getModel();
       }
-      if ( val == "A"){
-        if ( this.items.length > 0 && this.form.id == null ){
-                  this.$emit("selected", this.items[0] );
+      if (val == "A") {
+        if (this.items.length > 0 && this.form.id == null) {
+          this.form = this.items[0];
+          //      this.$emit("selected", this.form );
         }
       }
-    }
+      if (val == "V") {
+        this.form = service.getModel();
 
+        //   this.$emit("selected", this.form );
+      }
+      this.$emit("selected", this.form);
+    }
   },
   methods: {
+    seleciona(event) {
+      if (event.target.value != null) {
+        for (var i = 0; i < this.items.length; i++) {
+          if (this.items[i].id.toString() == event.target.value.toString()) {
+            this.form = this.items[i] ;
+            this.$emit("selected", this.items[i]);
 
-    seleciona(event){
-
-      if ( this.form.id != null ){
-        for ( var i = 0; i < this.items.length; i++ ){
-          if ( this.items[i].id == this.form.id ){
+            if ( this.onSelected != null ){
+              this.onSelected( this.items[i] );
+            }
             
-            this.$emit("selected", this.items[i] );
+           //  console.log("emitiu ? ", this.items[i]  );
             return false;
           }
         }
       }
+    },
+    getFormById(id) {
+      if (id == null) return null;
 
+      if (id != null) {
+        for (var i = 0; i < this.items.length; i++) {
+          if (this.items[i].id.toString() == id.toString()) {
+            return this.items[i];
+          }
+        }
+      }
     },
     onLoadEstado() {
       var self = this;

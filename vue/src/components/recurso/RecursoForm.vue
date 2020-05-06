@@ -128,7 +128,7 @@
             </div>
           </div>
 
-          <div class="col-xs-4">
+          <div class="col-xs-4" v-if="false">
             <div class="form-group">
               <label for="f_dimensao">Dimensão</label>
               <select
@@ -146,7 +146,7 @@
             </div>
           </div>
 
-          <div class="col-xs-8">
+          <div class="col-xs-8" v-if="false">
             <div class="form-group">
               <label for="f_recursos">Recursos</label>
               <input
@@ -202,11 +202,32 @@
       </div>
     </section>
 
-    <section class="col-xs-12" v-if="show_endereco">
+    <cad_endereco_superior
+      :tipo_endereco.sync="form.tipo_endereco"
+      :url_endereco_virtual.sync="form.url_endereco_virtual"
+      v-model="form_endereco"
+      v-if="show_endereco"
+    ></cad_endereco_superior>
+
+    <section class="col-xs-12" v-if="false">
       <div class="box">
         <div class="box-header with-border">Endereço</div>
         <div class="box-body">
-          <cad_endereco v-model="form_endereco"></cad_endereco>
+          <div class="form-group">
+            <label>Tipo de endereço:</label>
+            <select v-model="form.tipo_endereco">
+              <option value="F">Físico</option>
+              <option value="V">Virtual</option>
+            </select>
+            <input
+              v-if="form.tipo_endereco=='V'"
+              class="form-control"
+              v-model="form.url_endereco_virtual"
+              type="text"
+              placeholder="Informe a URL"
+            />
+          </div>
+          <cad_endereco v-if="form.tipo_endereco =='F'" v-model="form_endereco"></cad_endereco>
         </div>
       </div>
     </section>
@@ -326,9 +347,11 @@ export default {
         nome: "",
         detalhe: "",
         tipo_recurso: "",
+        tipo_endereco: "F",
         id_categoria: "",
         status: "",
         tipo_fluxo: "",
+        tipo_produto_virtual: null,
         dados: {
           id: "",
           objetivo: "",
@@ -359,7 +382,7 @@ export default {
       message_text: "",
       message_type: "success",
       interval_message: null,
-      show_endereco: false,
+      show_endereco: false
     };
   },
   mounted() {
@@ -370,7 +393,7 @@ export default {
     if (this.show_back_button != null && this.show_back_button != undefined) {
       this.botao_voltar_visible = this.show_back_button;
     }
-     self.show_endereco = false;
+    self.show_endereco = false;
 
     obj_api.call("recursos_new", "GET", {}, function(response) {
       self.list_categorias = response.list_categorias;
@@ -379,7 +402,6 @@ export default {
       self.lista_cat = response.lista_cat;
       self.show_endereco = true;
     });
-    
 
     if (this.id_load == null || this.id_load.toString() == "") {
       return;
@@ -403,19 +425,25 @@ export default {
           objetivo: "",
           objetivo_ods: "",
           dimensao: "",
-          recursos: ""
+          recursos: "",
+          tipo_endereco: "F"
         };
       }
 
-      if ( self.form.id_endereco != null ){
-         self.show_endereco = false;
-        obj_api.call2("enderecos/"+  self.form.id_endereco, "get", null, function(result){
-          if ( result.data != null ){
-            //console.log("formendereço? ", result.data );
-            self.form_endereco = result.data;
+      if (self.form.id_endereco != null) {
+        self.show_endereco = false;
+        obj_api.call2(
+          "enderecos/" + self.form.id_endereco,
+          "get",
+          null,
+          function(result) {
+            if (result.data != null) {
+              //console.log("formendereço? ", result.data );
+              self.form_endereco = result.data;
+            }
+            self.show_endereco = true;
           }
-           self.show_endereco = true;
-        })
+        );
       }
       self.disableButton = false;
     };
@@ -432,6 +460,13 @@ export default {
       self.id_categoria = item.id_categoria;
       self.status = item.status;
       self.tipo_fluxo = item.tipo_fluxo;
+
+      self.tipo_endereco = item.tipo_endereco;
+
+      if (self.tipo_endereco == null) {
+        self.tipo_endereco = "F";
+      }
+      self.url_endereco_virtual = item.url_endereco_virtual;
     },
 
     exibe_error(tipo) {},
@@ -448,15 +483,29 @@ export default {
       if (obj_alert.isvazioInput("f_nome", "Informe o Título da Iniciativa!"))
         return false;
 
-        var res_endereco = serviceEndereco.msgValidaEndereco(self.form_endereco);
+      if (this.form.tipo_endereco == "F") {
+        var res_endereco = serviceEndereco.msgValidaEndereco(
+          self.form_endereco
+        );
 
-        if ( res_endereco.length > 0 ){
-
-              obj_alert.show("Atenção", "Endereço: " + res_endereco[0].msg, "warning", null );
-              return false;
-
+        if (res_endereco.length > 0) {
+          obj_alert.show(
+            "Atenção",
+            "Endereço: " + res_endereco[0].msg,
+            "warning",
+            null
+          );
+          return false;
         }
-
+      } else {
+        if (
+          obj_alert.isvazioInput(
+            "f_url_endereco_virtual",
+            "Informe a URL do endereço virtual"
+          )
+        )
+          return false;
+      }
 
       if (obj_alert.isvazioInput("f_tipo_recurso", "Informe o tipo_recurso!"))
         return false;
@@ -506,7 +555,9 @@ export default {
         //dimensao: this.form.dados.dimensao,
         objetivo: this.form.dados.objetivo,
         objetivo_ods: this.form.dados.objetivo_ods,
-        recursos: this.form.dados.recursos
+        recursos: this.form.dados.recursos,
+        tipo_endereco: this.form.tipo_endereco,
+        url_endereco_virtual: this.form.url_endereco_virtual
       };
 
       if (this.form.id != null && this.form.id.toString() != "") {
@@ -517,7 +568,6 @@ export default {
 
       // var data = this.form;
 
-      
       self.show_endereco = false;
 
       var fn_return = function(retorno) {
@@ -532,9 +582,8 @@ export default {
         self.disableButton = false;
         self.show_contato = true;
 
-        setTimeout(function(){
-        self.show_endereco = true;
-
+        setTimeout(function() {
+          self.show_endereco = true;
         }, 100);
 
         if (self.onSave != null && self.onSave != undefined) {
@@ -542,17 +591,23 @@ export default {
         }
       };
 
-      obj_api.call2("enderecos", "post", self.form_endereco, 
-      
-      function(res){
+      if (self.form.tipo_endereco == "F") {
+        obj_api.call2(
+          "enderecos",
+          "post",
+          self.form_endereco,
 
-        console.log("fiz o endereço? " , res );
+          function(res) {
+            console.log("fiz o endereço? ", res);
 
-              data["id_endereco"] = res.data.id;
-              obj_api.call(url, method, data, fn_return);
-
-      });
-
+            data["id_endereco"] = res.data.id;
+            obj_api.call(url, method, data, fn_return);
+          }
+        );
+      } else {
+        data["id_endereco"] = null;
+        obj_api.call(url, method, data, fn_return);
+      }
     },
 
     clear_message() {

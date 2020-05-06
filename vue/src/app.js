@@ -30,6 +30,8 @@ import RecursosList from './components/recurso/RecursoList.vue'
 import RecursoAssociacao from './components/recurso/recurso_associacao.vue'
 import RecursoTodos from './components/recurso/ListTodos.vue'
 import CadEndereco from './components/endereco/CadEndereco.vue'
+import CadEnderecoSuperior from './components/endereco/CadEnderecoSuperior.vue'
+import CadEnderecoForExterno from './components/endereco/CadEnderecoForExterno.vue'
 
 
 //import uc_pesquisacodigonome from './components/pesquisa/uc_pesquisacodigonome.vue'
@@ -46,6 +48,8 @@ Vue.component('recurso_associacao', RecursoAssociacao);
 Vue.component('vue_select', Select);
 Vue.component('recurso_todos', RecursoTodos);
 Vue.component('cad_endereco', CadEndereco);
+Vue.component('cad_endereco_superior', CadEnderecoSuperior);
+Vue.component('cad_endereco_for_externo', CadEnderecoForExterno);
 
 
 //Vue.component('uc_pesquisacodigonome', uc_pesquisacodigonome);

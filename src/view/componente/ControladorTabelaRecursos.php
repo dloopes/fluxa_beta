@@ -67,7 +67,7 @@ class ControladorTabelaRecursos implements IControladorTabelaDados {
 
         switch ($indice) {
             case 0:
-                return "<a href='/sistema/mapa/recursos/".$registro->getId()."'>".$registro->getNome()."</a>";
+                return "<a href='".BASE_SISTEMA."mapa/recursos/".$registro->getId()."'>".$registro->getNome()."</a>";
                 return $registro->getNome();
             case 1:
                 return $registro->getCategoria()->getNome();

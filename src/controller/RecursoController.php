@@ -39,15 +39,15 @@ class RecursoController extends BaseController{
 			$status = $dadosRequest['status'];
 			$tipoFluxo = $dadosRequest['tipo_fluxo'];
 
-			$cep = $dadosRequest['cep'];
-			$logradouro = $dadosRequest['logradouro'];
-			$numero = $dadosRequest['numero'];
-			$complemento = $dadosRequest['complemento'];
-			$bairro = $dadosRequest['bairro'];
-			$cidade = $dadosRequest['cidade'];
-			$estado = $dadosRequest['uf'];
-			$pais = $dadosRequest['pais'];
-
+			$cep = @$dadosRequest['cep'];
+			$logradouro = @$dadosRequest['logradouro'];
+			$numero = @$dadosRequest['numero'];
+			$complemento = @$dadosRequest['complemento'];
+			$bairro = @$dadosRequest['bairro'];
+			$cidade = @$dadosRequest['cidade'];
+			$estado = @$dadosRequest['uf'];
+			$pais = @$dadosRequest['pais'];
+               
 			if (empty($nome)) {
 				throw new ControlerException("Nome é obrigatório");
 			}
@@ -68,7 +68,7 @@ class RecursoController extends BaseController{
 				throw new ControlerException("Tipo do Fluxo é obrigatório");
 			}
 
-			if (empty($cep)) {
+			/* if (empty($cep)) {
 				throw new ControlerException("CEP é obrigatório");
 			}
 
@@ -79,6 +79,7 @@ class RecursoController extends BaseController{
 			if (empty($logradouro) || empty($bairro) || empty($cidade) || empty($estado)) {
 				throw new ControlerException("Informe um CEP válido");
 			}
+                         * */
 
 			$recurso = new Recurso();
 
@@ -86,7 +87,7 @@ class RecursoController extends BaseController{
 				$recurso = $this->recursoBusiness->buscarPorId($id);							
 			}
 
-			$endereco = $recurso->getEndereco();	
+			/* $endereco = $recurso->getEndereco();	
 			$endereco->setCep($cep);
 			$endereco->setLogradouro($logradouro);
 			$endereco->setNumero($numero);
@@ -96,7 +97,7 @@ class RecursoController extends BaseController{
 			$endereco->setEstado($estado);
 			$endereco->setPais($pais);
 
-			$endereco = $this->enderecoBusiness->salvar($endereco);
+			$endereco = $this->enderecoBusiness->salvar($endereco); */
 
 			$recurso->setNome($nome);
 			$recurso->setDetalhe($detalhe);
@@ -105,9 +106,47 @@ class RecursoController extends BaseController{
 			$recurso->setIdUsuario($_SESSION['id']);
 			$recurso->setStatus($status);
 			$recurso->setTipoFluxo($tipoFluxo);
-			$recurso->setIdEndereco($endereco->getId());
+                        
+                        
+                        $hd_endereco_data = @$dadosRequest['hd_endereco_data'];
+			$hd_form_data = @$dadosRequest['hd_form_data'];
+                        
+                        if ( $hd_form_data != ""){
+                            
+                             $api_form = json_decode($hd_form_data);
+                             
+                             if ( $api_form->tipo_endereco == "V"){
+                              //endereco virtual   
+                        
+                             }else {
+                                 
+                                 if ( $hd_endereco_data != "" ){
+                                     
+                                     $endereco_data = json_decode(  $hd_endereco_data );
+                                     //print_r( $endereco_data );die(" ");
+                                     $res = \library\Api2::Call("enderecos", "POST", $endereco_data);
+                                     //die("dei retorno no endereço? ". $res );
+                                     $obj_retorno_endereco = json_decode($res);
+			             $recurso->setIdEndereco( $obj_retorno_endereco->data->id );
+                                 
+                                 
+                                 }
+                                 
+                                 
+                             }
+                        }
+                        
+                        
+                        
 
 			$this->recursoBusiness->salvar($recurso);
+                        
+                        
+                        
+                       $form_save = json_decode(  $hd_form_data );
+                       $form_save->id = $recurso->getId();
+                       $res = \library\Api2::Call("enderecos_virtual", "POST", $form_save);
+                       //die("salvei pela segunda vez? ". $res2);
 
 			if(!empty($id)){
 				$_SESSION['msg_sucesso'] = "Registro alterado com sucesso";
@@ -209,14 +248,14 @@ class RecursoController extends BaseController{
 			$status = $dadosRequest['status'];
 			$tipoFluxo = $dadosRequest['tipo_fluxo'];
 
-			$cep = $dadosRequest['cep'];
-			$logradouro = $dadosRequest['logradouro'];
-			$numero = $dadosRequest['numero'];
-			$complemento = $dadosRequest['complemento'];
-			$bairro = $dadosRequest['bairro'];
-			$cidade = $dadosRequest['cidade'];
-			$estado = $dadosRequest['uf'];
-			$pais = $dadosRequest['pais'];
+				$cep = @$dadosRequest['cep'];
+			$logradouro = @$dadosRequest['logradouro'];
+			$numero = @$dadosRequest['numero'];
+			$complemento = @$dadosRequest['complemento'];
+			$bairro = @$dadosRequest['bairro'];
+			$cidade = @$dadosRequest['cidade'];
+			$estado = @$dadosRequest['uf'];
+			$pais = @$dadosRequest['pais'];
 
 			if (empty($nome)) {
 				throw new ControlerException("Nome é obrigatório");
@@ -238,7 +277,7 @@ class RecursoController extends BaseController{
 				throw new ControlerException("Tipo de Fluxo é obrigatório");
 			}
 
-			if (empty($cep)) {
+			/* if (empty($cep)) {
 				throw new ControlerException("CEP é obrigatório");
 			}
 
@@ -249,6 +288,7 @@ class RecursoController extends BaseController{
 			if (empty($logradouro) || empty($bairro) || empty($cidade) || empty($estado)) {
 				throw new ControlerException("Informe um CEP válido");
 			}
+                         * */
 
 			$recurso = new Recurso();
 
@@ -256,7 +296,7 @@ class RecursoController extends BaseController{
 				$recurso = $this->recursoBusiness->buscarPorId($id);							
 			}
 
-			$endereco = $recurso->getEndereco();	
+			/* $endereco = $recurso->getEndereco();	
 			$endereco->setCep($cep);
 			$endereco->setLogradouro($logradouro);
 			$endereco->setNumero($numero);
@@ -267,6 +307,8 @@ class RecursoController extends BaseController{
 			$endereco->setPais($pais);
 
 			$endereco = $this->enderecoBusiness->salvar($endereco);
+                         * */
+                        
 
 			$recurso = new Recurso();
 
@@ -281,10 +323,47 @@ class RecursoController extends BaseController{
 			$recurso->setIdUsuario($_SESSION['id']);
 			$recurso->setStatus($status);
 			$recurso->setTipoFluxo($tipoFluxo);
-			$recurso->setIdEndereco($endereco->getId());
+			//$recurso->setIdEndereco($endereco->getId());
+                        
+                           
+                        $hd_endereco_data = @$dadosRequest['hd_endereco_data'];
+			$hd_form_data = @$dadosRequest['hd_form_data'];
+                        $virtual = false;
+                        
+                        if ( $hd_form_data != ""){
+                            
+                             $api_form = json_decode($hd_form_data);
+                             
+                             if ( $api_form->tipo_endereco == "V"){
+                              //endereco virtual   
+                                 $virtual = true;
+                        
+                             }else {
+                                 
+                                 if ( $hd_endereco_data != "" ){
+                                     
+                                     $endereco_data = json_decode(  $hd_endereco_data );
+                                     //print_r( $endereco_data );die(" ");
+                                     $res = \library\Api2::Call("enderecos", "POST", $endereco_data);
+                                     //die("dei retorno no endereço? ". $res );
+                                     $obj_retorno_endereco = json_decode($res);
+			             $recurso->setIdEndereco( $obj_retorno_endereco->data->id );
+                                 
+                                 
+                                 }
+                                 
+                                 
+                             }
+                        }
 
 			$this->recursoBusiness->salvar($recurso);
-
+                        
+                         $form_save = json_decode(  $hd_form_data );
+                         $form_save->id = $recurso->getId();
+                         $res2 = \library\Api2::Call("enderecos_virtual", "POST", $form_save);
+                            
+                         //die("salvei pela segunda vez? ". $res2);
+                            
 			if(!empty($id)){
 				$_SESSION['msg_sucesso'] = "Registro alterado com sucesso";
 

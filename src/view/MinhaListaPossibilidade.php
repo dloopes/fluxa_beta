@@ -43,10 +43,10 @@ use Fluxa\Entity\EnumRecursoStatus;
 			          <td><?= $possibilidade->getNome() ?></td>
 			          <td><?= EnumRecursoStatus::getValueView($possibilidade->getStatus()) ?></td>
 			          <td>
-			          	<a href="/sistema/mapa/recursos/potencialidade/<?= $possibilidade->getNome()?>" class="btn btn-warning btn-sm" title="Buscar Sinergia">
+			          	<a href="<?= BASE_SISTEMA ?>mapa/recursos/potencialidade/<?= $possibilidade->getNome()?>" class="btn btn-warning btn-sm" title="Buscar Sinergia">
 							<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
 						</a>
-			        	<a href="/sistema/possibilidades/cadastro/<?= $possibilidade->getId()?>" class="btn btn-primary btn-sm" title="Editar">
+			        	<a href="<?= BASE_SISTEMA ?>possibilidades/cadastro/<?= $possibilidade->getId()?>" class="btn btn-primary btn-sm" title="Editar">
 							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 						</a>
 
